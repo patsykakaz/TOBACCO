@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% load pages_tags mezzanine_tags i18n staticfiles %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static "css/temp.css" %}">
+{% endblock %}
+
+{% block meta_title %}DisplayCompanies{% endblock %}
+{% block title %}Display/Print{% endblock %}
+
+
+{% block main %}
+
+    {% if allCat %}
+        <form method='POST' action=''>
+            {% csrf_token %}
+            <select name="topic">
+            {% for cat in allCat %}
+                <option value="{{ cat.title }}">
+                {{cat.title}}
+                </option>
+            {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary" style='margin-top:10px;'>Envoyer
+            </button>
+        </form>
+    {% else %}
+        {% for societe in allCompanies %}
+            <div class='societe'>
+                <h1>{{ societe.title }}</h1>
+                <div class='row'>
+                    <div class='info col-md-6'>Adresse: <b>{{ societe.adress }}</b></div>
+                    <div class='info col-md-6'> Code Postal: <b>{{ societe.zipCode }}</b></div>
+                    <div class='info col-md-6'>ville: <b>{{ societe.city }}</b></div>
+                    <div class='info col-md-6'>Région: <b>{{ societe.area }}</b></div>
+                    <div class='info col-md-6'>Pays: <b>{{ societe.country }}</b></div>
+                    <div class='info col-md-6'>EMail: <b>{{societe.email}}</b></div>
+                    <div class='info col-md-6'>Telephone: <b>{{societe.phone}}</b></div><div class='info col-md-6'>web: <b>{{societe.website}}</b></div>
+                </div>
+                {% if societe.brands.all %}
+                <div class='marques'><b>MARQUES </b>
+                    {% for marque in societe.brands.all %}
+                        <div class='marque'>{{ marque.title }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class='membres row'>
+                    <div class='col-md-12 text-left' style='margin: 15px 0 5px 0;'><b>EMPLOYES </b></div>
+                    {% for membre in societe.employees %}
+                        <div class='col-md-3 col-sm-4 col-xs-6'>
+                            <div class='membre'>
+                                <h4 >{{ membre.firstName }} <b style='color:rgb(50,50,60);'>{{ membre.title }} </b></h4>
+                                {% if membre.illustration %}
+                                    <img src='{{ MEDIA_URL }}{% thumbnail membre.illustration 0 80 %}' />
+                                {% endif %}
+                                <div class='info'> Poste:<b> {{ membre.job.title }} </b></div>
+                                <div class='info'>Adresse:<b> {{  membre.adress }} </b></div>
+                                <div class='info'> Code Postal:<b> {{  membre.zipCode }} </b></div>
+                                <div class='info'>ville:<b> {{  membre.city }} </b></div>
+                                <div class='info'>Région:<b> {{  membre.area }} </b></div>
+                                <div class='info'>Pays:<b> {{  membre.country }} </b></div>
+                                <div class='info'>EMail:<b> {{ membre.email}} </b></div>
+                                <div class='info'>Telephone:<b> {{ membre.phone}}</b></div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+                {% if societe.filliales %}
+                    <div style='margin-top:15px;'><b>FILLIALES</b></div>
+                    <div class='allFilliales'>
+                    {% for subsociete in societe.filliales %}
+                        <div class='filliale'>
+                            <h2>{{ subsociete.sub_company.title }}</h2>
+                            <div class='row'>
+                                <div class='info col-md-6'>Adresse: {{ subsociete.sub_company.adress }}</div>
+                                <div class='info col-md-6'> Code Postal: {{  subsociete.sub_company.zipCode }}</div>
+                                <div class='info col-md-6'>ville: {{  subsociete.sub_company.city }}</div>
+                                <div class='info col-md-6'>Région: {{  subsociete.sub_company.area }}</div>
+                                <div class='info col-md-6'>Pays: {{  subsociete.sub_company.country }}</div>
+                                <div class='info col-md-6'>EMail: {{ subsociete.sub_company.email}}</div>
+                                <div class='info col-md-6'>Telephone: {{ subsociete.sub_company.phone}}</div><div class='info col-md-6'>web: {{ subsociete.sub_company.website}}</div>
+                            </div>
+                            <div class='marques'><b>MARQUES </b>
+                                {% for marque in subsociete.sub_company.brands.all %}
+                                    <div class='marque'>{{ marque.title }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class='membres row'>
+                                <div class='col-md-12 text-left' style='margin-bottom: 5px;'><b>EMPLOYES </b>
+                                {{ subsociete.employees.all }} </div>
+                                {% for membre in subsociete.employees %}
+                                    <div class='col-md-3 col-sm-4 col-xs-6'>
+                                        <div class='membre'>
+                                            <h4>{{ membre.title }} {{ membre.firstName }}</h4>
+                                            {% if membre.illustration %}
+                                                <img src='{{ MEDIA_URL }}{% thumbnail membre.illustration 0 80 %}' />
+                                            {% endif %}
+                                            <div class='info'> Poste:<b> {{ membre.job.title }} </b></div>
+                                            <div class='info'>Adresse:<b> {{  membre.adress }} </b></div>
+                                            <div class='info'> Code Postal:<b> {{  membre.zipCode }} </b></div>
+                                            <div class='info'>ville:<b> {{  membre.city }} </b></div>
+                                            <div class='info'>Région:<b> {{  membre.area }} </b></div>
+                                            <div class='info'>Pays:<b> {{  membre.country }} </b></div>
+                                            <div class='info'>EMail:<b> {{ membre.email}} </b></div>
+                                            <div class='info'>Telephone:<b> {{ membre.phone}}</b></div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+{% endblock %}
+
