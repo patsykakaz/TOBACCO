@@ -4,5 +4,6 @@
 .DS_Store
 .coverage
 settings.py
+local_settings.py
 /static
 /migrations

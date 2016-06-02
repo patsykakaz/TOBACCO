@@ -15,7 +15,7 @@ from mezzanine.utils.models import upload_to
 # !! PRODUIT !!
 
 
-class Product(Page):
+class Product(Page, RichText):
     illustration = FileField(verbose_name=_("illustration"),
         upload_to=upload_to("MAIN.Product.illustration", "product"),
         format="Image", max_length=255, null=True, blank=True)
@@ -36,7 +36,7 @@ class Product(Page):
             self.parent = Page.objects.get(title='PRODUITS')
         super(Product, self).save(*args, **kwargs)
 
-class Brand(Page):
+class Brand(Page, RichText):
     products = models.ManyToManyField('Product',blank=True)
     topics = models.ManyToManyField('Topic',blank=True)
     illustration = FileField(verbose_name=_("illustration"),
@@ -56,7 +56,7 @@ class Brand(Page):
             self.parent = Page.objects.get(title='MARQUES')
         super(Brand, self).save(*args, **kwargs)
 
-class Topic(Page):
+class Topic(Page, RichText):
     illustration = FileField(verbose_name=_("illustration"),
         upload_to=upload_to("MAIN.Topic.illustration", "topic"),
         format="Image", max_length=255, null=True, blank=True)
@@ -77,22 +77,23 @@ class Topic(Page):
             self.parent = Page.objects.get(title='RUBRIQUES')
         super(Topic, self).save(*args, **kwargs)
 
-class Company(Page):
+class Company(Page, RichText):
     subsidiaries = models.ManyToManyField("self",through='Subsidiary',symmetrical=False)
     illustration = FileField(verbose_name=_("illustration"),
         upload_to=upload_to("MAIN.Company.illustration", "company"),
-        format="Image", max_length=255, null=False, blank=True)
+        format="Image", max_length=255, null=True, blank=True)
     topics = models.ManyToManyField('Topic',blank=True)
     brands = models.ManyToManyField('Brand',blank=True)
     adress = models.CharField(max_length=255, null=False,blank=True)
     zipCode = models.CharField(max_length=255, null=False,blank=True)
+    bp = models.CharField(max_length=100,null=False,blank=True)
     area = models.CharField(max_length=255, null=False,blank=True)
     city = models.CharField(max_length=255, null=False,blank=True)
     country = models.CharField(max_length=255,null=False,blank=True)
-    email = models.EmailField(null=False,blank=True)
-    tel = models.CharField(max_length=255, null=False,blank=True)
-    fax = models.CharField(max_length=255, null=False,blank=True)
-    website = models.CharField(max_length=255, null=False,blank=True)
+    email = models.TextField(null=False,blank=True)
+    tel = models.TextField(null=False,blank=True)
+    fax = models.TextField(null=False,blank=True)
+    website = models.TextField(null=False,blank=True)
     highlight = models.BooleanField(default=False,null=False,blank=True)
 
     def __unicode__(self):
@@ -132,7 +133,7 @@ class Subsidiary(models.Model):
     class Meta:
         verbose_name='Société affiliée'
 
-class Person(Page):
+class Person(Page, RichText):
     illustration = FileField(verbose_name=_("illustration"),
         upload_to=upload_to("MAIN.Person.illustration", "person"),
         format="Image", max_length=255, null=True, blank=True)
@@ -157,6 +158,7 @@ class Person(Page):
 
     class Meta:
         verbose_name='INDIVIDU'
+        ordering = ['title']
 
 class Job(models.Model):
     person = models.ForeignKey(Person,verbose_name='Employé')

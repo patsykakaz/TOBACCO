@@ -12,10 +12,13 @@ from mezzanine.blog.models import BlogPost
 
 
 class ProductAdmin(PageAdmin):
-    fieldsets = deepcopy(PageAdmin.fieldsets)
+    allFields = deepcopy(PageAdmin.fieldsets)
+    allFields[0][1]["fields"].insert(-1, "content")
+    fieldsets = allFields
 
 
 brand_fieldsets = deepcopy(PageAdmin.fieldsets)
+brand_fieldsets[0][1]["fields"].insert(-1, "content")
 brand_fieldsets[0][1]["fields"].insert(-1, "products")
 brand_fieldsets[0][1]["fields"].insert(-1, "topics")
 brand_fieldsets[0][1]["fields"].insert(-1, "illustration")
@@ -24,7 +27,9 @@ class BrandAdmin(PageAdmin):
     fieldsets = brand_fieldsets
 
 class TopicAdmin(PageAdmin):
-    fieldsets = deepcopy(PageAdmin.fieldsets)
+    allFields = deepcopy(PageAdmin.fieldsets)
+    allFields[0][1]["fields"].insert(-1, "content")
+    fieldsets = allFields
 
 class SubsidiaryInline(admin.TabularInline):
     model = Subsidiary
@@ -36,11 +41,13 @@ class JobInline(admin.TabularInline):
     extra = 5
 
 company_fieldsets = deepcopy(PageAdmin.fieldsets)
+company_fieldsets[0][1]["fields"].insert(-1, "content")
 company_fieldsets[0][1]["fields"].insert(-1, "brands")
 company_fieldsets[0][1]["fields"].insert(-1, "topics")
 company_fieldsets[0][1]["fields"].insert(-1, "illustration")
 company_fieldsets[0][1]["fields"].insert(-1, "adress")
 company_fieldsets[0][1]["fields"].insert(-1, "zipCode")
+company_fieldsets[0][1]["fields"].insert(-1, "bp")
 company_fieldsets[0][1]["fields"].insert(-1, "area")
 company_fieldsets[0][1]["fields"].insert(-1, "city")
 company_fieldsets[0][1]["fields"].insert(-1, "country")
@@ -57,6 +64,7 @@ class CompanyAdmin(PageAdmin):
 
 person_fieldsets = deepcopy(PageAdmin.fieldsets)
 person_fieldsets[0][1]["fields"].insert(-1, "firstName")
+person_fieldsets[0][1]["fields"].insert(-1, "content")
 person_fieldsets[0][1]["fields"].insert(-1, "illustration")
 person_fieldsets[0][1]["fields"].insert(-1, "adress")
 person_fieldsets[0][1]["fields"].insert(-1, "zipCode")
@@ -75,3 +83,4 @@ admin.site.register(Brand, BrandAdmin)
 admin.site.register(Topic, TopicAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Company, CompanyAdmin)
+

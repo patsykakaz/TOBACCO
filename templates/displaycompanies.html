@@ -35,8 +35,15 @@
                     <div class='info col-md-6'>Région: <b>{{ societe.area }}</b></div>
                     <div class='info col-md-6'>Pays: <b>{{ societe.country }}</b></div>
                     <div class='info col-md-6'>EMail: <b>{{societe.email}}</b></div>
-                    <div class='info col-md-6'>Telephone: <b>{{societe.phone}}</b></div><div class='info col-md-6'>web: <b>{{societe.website}}</b></div>
+                    <div class='info col-md-6'>Telephone: <b>{{societe.tel }}</b></div><div class='info col-md-6'>web: <b>{{societe.website}}</b></div>
                 </div>
+                {% if societe.content != "False" %}
+                <div class='row'>
+                    <div class='col-md-10 col-md-offset-1' style='margin-top:10px; padding:3px 6px; background-color:rgb(230,230,230);'>
+                        {{ societe.content|richtext_filters|safe  }}
+                    </div>
+                </div>
+                {% endif %}
                 {% if societe.brands.all %}
                 <div class='marques'><b>MARQUES </b>
                     {% for marque in societe.brands.all %}
@@ -60,7 +67,7 @@
                                 <div class='info'>Région:<b> {{  membre.area }} </b></div>
                                 <div class='info'>Pays:<b> {{  membre.country }} </b></div>
                                 <div class='info'>EMail:<b> {{ membre.email}} </b></div>
-                                <div class='info'>Telephone:<b> {{ membre.phone}}</b></div>
+                                <div class='info'>Telephone:<b> {{ membre.tel }}</b></div>
                             </div>
                         </div>
                     {% endfor %}
@@ -78,7 +85,7 @@
                                 <div class='info col-md-6'>Région: {{  subsociete.sub_company.area }}</div>
                                 <div class='info col-md-6'>Pays: {{  subsociete.sub_company.country }}</div>
                                 <div class='info col-md-6'>EMail: {{ subsociete.sub_company.email}}</div>
-                                <div class='info col-md-6'>Telephone: {{ subsociete.sub_company.phone}}</div><div class='info col-md-6'>web: {{ subsociete.sub_company.website}}</div>
+                                <div class='info col-md-6'>Telephone: {{ subsociete.sub_company.tel }}</div><div class='info col-md-6'>web: {{ subsociete.sub_company.website}}</div>
                             </div>
                             <div class='marques'><b>MARQUES </b>
                                 {% for marque in subsociete.sub_company.brands.all %}
@@ -102,7 +109,7 @@
                                             <div class='info'>Région:<b> {{  membre.area }} </b></div>
                                             <div class='info'>Pays:<b> {{  membre.country }} </b></div>
                                             <div class='info'>EMail:<b> {{ membre.email}} </b></div>
-                                            <div class='info'>Telephone:<b> {{ membre.phone}}</b></div>
+                                            <div class='info'>Telephone:<b> {{ membre.tel }}</b></div>
                                         </div>
                                     </div>
                                 {% endfor %}
