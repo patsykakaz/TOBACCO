@@ -37,7 +37,7 @@
                     <div class='info col-md-6'>EMail: <b>{{societe.email}}</b></div>
                     <div class='info col-md-6'>Telephone: <b>{{societe.tel }}</b></div><div class='info col-md-6'>web: <b>{{societe.website}}</b></div>
                 </div>
-                {% if societe.content != "False" %}
+                {% if societe.content != "<p>False</p>" %}
                 <div class='row'>
                     <div class='col-md-10 col-md-offset-1' style='margin-top:10px; padding:3px 6px; background-color:rgb(230,230,230);'>
                         {{ societe.content|richtext_filters|safe  }}
@@ -87,17 +87,19 @@
                                 <div class='info col-md-6'>EMail: {{ subsociete.sub_company.email}}</div>
                                 <div class='info col-md-6'>Telephone: {{ subsociete.sub_company.tel }}</div><div class='info col-md-6'>web: {{ subsociete.sub_company.website}}</div>
                             </div>
+                            {% if subsociete.sub_company.brands.all %}
                             <div class='marques'><b>MARQUES </b>
                                 {% for marque in subsociete.sub_company.brands.all %}
                                     <div class='marque'>{{ marque.title }}</div>
                                 {% endfor %}
                             </div>
+                            {% endif %}
                             <div class='membres row'>
-                                <div class='col-md-12 text-left' style='margin-bottom: 5px;'><b>EMPLOYES </b>
-                                {{ subsociete.employees.all }} </div>
+                                <div class='col-md-12 text-left' style='margin-top:15px; margin-bottom: 5px;'><b>EMPLOYES </b>
+                                </div>
                                 {% for membre in subsociete.employees %}
                                     <div class='col-md-3 col-sm-4 col-xs-6'>
-                                        <div class='membre'>
+                                        <div class='membre' style='margin-top:0; border-top:1px solid grey'>
                                             <h4>{{ membre.title }} {{ membre.firstName }}</h4>
                                             {% if membre.illustration %}
                                                 <img src='{{ MEDIA_URL }}{% thumbnail membre.illustration 0 80 %}' />
@@ -123,4 +125,5 @@
     {% endif %}
 
 {% endblock %}
+
 

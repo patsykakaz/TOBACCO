@@ -22,7 +22,6 @@ def displayCompanies(request):
     if request.POST:
         try:
             cat = request.POST['topic']
-            print cat
             topic = Topic.objects.get(title=cat)
         except:
             return HttpResponse('Aucune catégorie correspondant à l\'entrée')
@@ -35,7 +34,7 @@ def displayCompanies(request):
                 except:
                     person.job = False
             company.filliales = Subsidiary.objects.filter(top_company=company)
-            for filliale in company.filliales.all():
+            for filliale in company.filliales:
                 filliale.employees = Person.objects.filter(companies=filliale.sub_company)
                 for employee in filliale.employees:
                     try: 
@@ -231,3 +230,4 @@ def importXML(request,start,end):
 
         i1 +=1
     return HttpResponse("IMPORT XML process ended.")
+

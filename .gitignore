@@ -6,4 +6,6 @@
 settings.py
 local_settings.py
 /static
+!/static/css
+!/static/js
 **/migrations
