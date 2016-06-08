@@ -25,19 +25,24 @@
             </button>
         </form>
     {% else %}
+        <h4>Résultats pour : </h4>
+        <h1 class='text-center' style='margin-bottom:30px; color:#428bca;'>{{ topic.title|upper }}</h1>
         {% for societe in allCompanies %}
             <div class='societe'>
                 <h1>{{ societe.title }}</h1>
                 <div class='row'>
                     <div class='info col-md-6'>Adresse: <b>{{ societe.adress }}</b></div>
                     <div class='info col-md-6'> Code Postal: <b>{{ societe.zipCode }}</b></div>
+                    <div class='info col-md-6'> BP: <b>{{ societe.bp }}</b></div>
                     <div class='info col-md-6'>ville: <b>{{ societe.city }}</b></div>
                     <div class='info col-md-6'>Région: <b>{{ societe.area }}</b></div>
                     <div class='info col-md-6'>Pays: <b>{{ societe.country }}</b></div>
                     <div class='info col-md-6'>EMail: <b>{{societe.email}}</b></div>
-                    <div class='info col-md-6'>Telephone: <b>{{societe.tel }}</b></div><div class='info col-md-6'>web: <b>{{societe.website}}</b></div>
+                    <div class='info col-md-6'>Telephone: <b>{{societe.tel }}</b></div>
+                    <div class='info col-md-6'>Fax: <b>{{societe.fax }}</b></div>
+                    <div class='info col-md-6'>web: <b>{{societe.website}}</b></div>
                 </div>
-                {% if societe.content != "<p>False</p>" %}
+                {% if not "false" in societe.content|richtext_filters|lower|safe %}
                 <div class='row'>
                     <div class='col-md-10 col-md-offset-1' style='margin-top:10px; padding:3px 6px; background-color:rgb(230,230,230);'>
                         {{ societe.content|richtext_filters|safe  }}
@@ -45,10 +50,17 @@
                 </div>
                 {% endif %}
                 {% if societe.brands.all %}
-                <div class='marques'><b>MARQUES </b>
-                    {% for marque in societe.brands.all %}
-                        <div class='marque'>{{ marque.title }}</div>
+                <div class='marques'><b>PRODUITS </b>
+                    <div class='row'>
+                    {% for productType, brands in societe.productList.items %}
+                        <div class='marque col-md-3'>
+                            <h4>{{ productType.title }}</h4>
+                            {% for brand in brands %}
+                                {{ brand.title }} | 
+                            {% endfor %}
+                        </div>
                     {% endfor %}
+                    </div>
                 </div>
                 {% endif %}
                 <div class='membres row'>
@@ -81,17 +93,34 @@
                             <div class='row'>
                                 <div class='info col-md-6'>Adresse: {{ subsociete.sub_company.adress }}</div>
                                 <div class='info col-md-6'> Code Postal: {{  subsociete.sub_company.zipCode }}</div>
+                                <div class='info col-md-6'> BP: {{  subsociete.sub_company.bp }}</div>
                                 <div class='info col-md-6'>ville: {{  subsociete.sub_company.city }}</div>
                                 <div class='info col-md-6'>Région: {{  subsociete.sub_company.area }}</div>
                                 <div class='info col-md-6'>Pays: {{  subsociete.sub_company.country }}</div>
                                 <div class='info col-md-6'>EMail: {{ subsociete.sub_company.email}}</div>
-                                <div class='info col-md-6'>Telephone: {{ subsociete.sub_company.tel }}</div><div class='info col-md-6'>web: {{ subsociete.sub_company.website}}</div>
+                                <div class='info col-md-6'>Telephone: {{ subsociete.sub_company.tel }}</div>
+                                <div class='info col-md-6'>Fax: {{ subsociete.sub_company.fax }}</div>
+                                <div class='info col-md-6'>web: {{ subsociete.sub_company.website}}</div>
                             </div>
+                            {% if not "false" in subsociete.sub_company.content|richtext_filters|lower|safe %}
+                            <div class='row'>
+                                <div class='col-md-10 col-md-offset-1' style='margin-top:10px; padding:3px 6px; background-color:rgb(230,230,230);'>
+                                    {{ subsociete.sub_company.content|richtext_filters|safe  }}
+                                </div>
+                            </div>
+                            {% endif %}
                             {% if subsociete.sub_company.brands.all %}
-                            <div class='marques'><b>MARQUES </b>
-                                {% for marque in subsociete.sub_company.brands.all %}
-                                    <div class='marque'>{{ marque.title }}</div>
+                            <div class='marques'><b>PRODUITS </b>
+                                <div class='row'>
+                                {% for productType, brands in subsociete.sub_company.productList.items %}
+                                    <div class='marque col-md-3'>
+                                        <h4>{{ productType.title }}</h4>
+                                        {% for brand in brands %}
+                                            {{ brand.title }} | 
+                                        {% endfor %}
+                                    </div>
                                 {% endfor %}
+                                </div>
                             </div>
                             {% endif %}
                             <div class='membres row'>
@@ -116,6 +145,71 @@
                                     </div>
                                 {% endfor %}
                             </div>
+            {% if subsociete.filliales %}
+                <div style='margin-top:15px;'><b>FILLIALES</b></div>
+                <div class='allFilliales'>
+                {% for SubSubsociete in ssubociete.filliales %}
+                    <div class='filliale' style='border-color:red;'>
+                        <h2>{{ SubSubsociete.sub_company.title }}</h2>
+                        <div class='row'>
+                            <div class='info col-md-6'>Adresse: {{ SubSubsociete.sub_company.adress }}</div>
+                            <div class='info col-md-6'> Code Postal: {{  SubSubsociete.sub_company.zipCode }}</div>
+                            <div class='info col-md-6'> BP: {{  SubSubsociete.sub_company.bp }}</div>
+                            <div class='info col-md-6'>ville: {{  SubSubsociete.sub_company.city }}</div>
+                            <div class='info col-md-6'>Région: {{  SubSubsociete.sub_company.area }}</div>
+                            <div class='info col-md-6'>Pays: {{  SubSubsociete.sub_company.country }}</div>
+                            <div class='info col-md-6'>EMail: {{ SubSubsociete.sub_company.email}}</div>
+                            <div class='info col-md-6'>Telephone: {{ SubSubsociete.sub_company.tel }}</div>
+                            <div class='info col-md-6'>Fax: {{ SubSubsociete.sub_company.fax }}</div>
+                            <div class='info col-md-6'>web: {{ SubSubsociete.sub_company.website}}</div>
+                        </div>
+                        {% if not "false" in SubSubsociete.sub_company.content|richtext_filters|lower|safe %}
+                        <div class='row'>
+                            <div class='col-md-10 col-md-offset-1' style='margin-top:10px; padding:3px 6px; background-color:rgb(230,230,230);'>
+                                {{ SubSubsociete.sub_company.content|richtext_filters|safe  }}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if SubSubsociete.sub_company.brands.all %}
+                        <div class='marques'><b>PRODUITS </b>
+                            <div class='row'>
+                            {% for productType, brands in SubSubsociete.sub_company.productList.items %}
+                                <div class='marque col-md-3'>
+                                    <h4>{{ productType.title }}</h4>
+                                    {% for brand in brands %}
+                                        {{ brand.title }} | 
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class='membres row'>
+                            <div class='col-md-12 text-left' style='margin-top:15px; margin-bottom: 5px;'><b>EMPLOYES </b>
+                            </div>
+                            {% for membre in SubSubsociete.employees %}
+                                <div class='col-md-3 col-sm-4 col-xs-6'>
+                                    <div class='membre' style='margin-top:0; border-top:1px solid grey'>
+                                        <h4>{{ membre.title }} {{ membre.firstName }}</h4>
+                                        {% if membre.illustration %}
+                                            <img src='{{ MEDIA_URL }}{% thumbnail membre.illustration 0 80 %}' />
+                                        {% endif %}
+                                        <div class='info'> Poste:<b> {{ membre.job.title }} </b></div>
+                                        <div class='info'>Adresse:<b> {{  membre.adress }} </b></div>
+                                        <div class='info'> Code Postal:<b> {{  membre.zipCode }} </b></div>
+                                        <div class='info'>ville:<b> {{  membre.city }} </b></div>
+                                        <div class='info'>Région:<b> {{  membre.area }} </b></div>
+                                        <div class='info'>Pays:<b> {{  membre.country }} </b></div>
+                                        <div class='info'>EMail:<b> {{ membre.email}} </b></div>
+                                        <div class='info'>Telephone:<b> {{ membre.tel }}</b></div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
                         </div>
                     {% endfor %}
                     </div>
@@ -125,5 +219,6 @@
     {% endif %}
 
 {% endblock %}
+
 
 

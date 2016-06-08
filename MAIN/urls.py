@@ -38,8 +38,10 @@ urlpatterns += [
     # one out.
 
     url("^$", direct_to_template, {"template": "index.html"}, name="home"),
-    url(r'^import/(?P<start>.+)/(?P<end>.+)/$', 'MAIN.views.importXML', name='import'),
+    # url(r'^import/(?P<start>.+)/(?P<end>.+)/$', 'MAIN.views.importXML', name='import'),
+    # url(r'^uuu$', 'MAIN.views.updateImportXML', name='uuu'),
     url(r'^print$', 'MAIN.views.displayCompanies', name='print'),
+    # url(r'^test$', 'MAIN.views.test', name='test'),
 
     # HOMEPAGE AS AN EDITABLE PAGE IN THE PAGE TREE
     # ---------------------------------------------
@@ -103,4 +105,5 @@ urlpatterns += [
 # pages can use JS, CSS and images.
 handler404 = "mezzanine.core.views.page_not_found"
 handler500 = "mezzanine.core.views.server_error"
+
 

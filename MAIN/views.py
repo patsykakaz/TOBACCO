@@ -7,6 +7,7 @@ from PIL import Image
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.db.models import Q
 # from django.contrib.auth import logout, login, authenticate, get_backends
 # from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.models import User
@@ -25,7 +26,18 @@ def displayCompanies(request):
             topic = Topic.objects.get(title=cat)
         except:
             return HttpResponse('Aucune catégorie correspondant à l\'entrée')
+
+        # CHECK FOR SUBSIDIARY FIRST TO AVOID REDUNDANCY IN PRINT_FRONT
+        redundancyList = []
         allCompanies = Company.objects.filter(topics=topic)
+        for company in allCompanies:
+            filliales = Subsidiary.objects.filter(top_company=company)
+            for filliale in filliales:
+                if filliale.sub_company in allCompanies:
+                    redundancyList.append(filliale.sub_company.pk)
+        # ./
+
+        allCompanies = Company.objects.filter(topics=topic).exclude(pk__in=redundancyList)
         for company in allCompanies:
             company.employees = Person.objects.filter(companies=company)
             for person in company.employees:
@@ -33,15 +45,54 @@ def displayCompanies(request):
                     person.job = Job.objects.get(company=company,person=person)
                 except:
                     person.job = False
-            company.filliales = Subsidiary.objects.filter(top_company=company)
+
+            # product Listing
+            company.productList = {}
+            for brand in company.brands.all():
+                for product in brand.products.all():
+                    if not product in company.productList:
+                        company.productList[product] = [brand]
+                    else:
+                        company.productList[product].append(brand)
+            # ./
+
+            # FILLIALES [1]
+            company.filliales = Subsidiary.objects.filter(top_company=company).order_by('sub_company')
             for filliale in company.filliales:
+                # product Listing
+                filliale.productList = {}
+                for brand in filliale.sub_company.brands.all():
+                    for product in brand.products.all():
+                        if not product in filliale.productList:
+                            filliale.productList[product] = [brand]
+                        else:
+                            filliale.productList[product].append(brand)
+                # ./
                 filliale.employees = Person.objects.filter(companies=filliale.sub_company)
                 for employee in filliale.employees:
-                    try: 
+                    try:
                         employee.job = Job.objects.get(company=filliale,person=employees)
                     except:
                         employee.job = False
-                # print "XXXX %s " % filliale.employees
+
+                # subFILLIALES [2]
+                filliale.subFilliales = Subsidiary.objects.filter(top_company=filliale.sub_company).order_by('sub_company')
+                for subFilliale in filliale.subFilliales:
+                    # product Listing
+                    subFilliale.productList = {}
+                    for brand in subFilliale.sub_company.brands.all():
+                        for product in brand.products.all():
+                            if not product in subFilliale.productList:
+                                subFilliale.productList[product] = [brand]
+                            else:
+                                subFilliale.productList[product].append(brand)
+                    # ./
+                    subFilliale.employees = Person.objects.filter(companies=subFilliale.sub_company)
+                    for employee in subFilliale.employees:
+                        try: 
+                            employee.job = Job.objects.get(company=subFilliale,person=employees)
+                        except:
+                            employee.job = False
     else:
         allCat = Topic.objects.all()
     return render(request,'displaycompanies.html',locals())
@@ -98,6 +149,143 @@ def importPhoto(request):
     print len(allPersons)
     print "i1 -> %s" % i1
     return HttpResponse('Check CONSOLE')
+
+def updateImportXML(request):
+    tree = ET.parse('liste.xml')
+    root = tree.getroot()
+    i1 = 0
+    while i1 < 2000:
+        row = root[0][0][i1]
+        i2 = 0
+        for cell in row:
+            if cell.attrib:
+                for key,value in cell.attrib.items():
+                    if 'Index' in key:
+                        i2 = int(value) -1
+            if i2 == 4:
+                company = cell[0].text
+            if i2 == 8:
+                zipcode = cell[0].text
+            i2 +=1
+        try: 
+            company = Company.objects.get(title=company)
+            print type(zipcode)
+            print company.zipCode
+            if zipcode and not company.zipCode:
+                company.zipCode = zipcode
+                company.save()
+        except:
+            print "Company %s does not exist" % str(company.title)
+        i1 +=1
+    return HttpResponse("IMPORT XML process ended.")
+
+def test(request):
+    tree = ET.parse('liste.xml')
+    root = tree.getroot()
+    i1 = 0
+    nameList = []
+    fullNameList = []
+    homonymList = []
+    while i1 < 1650:
+        row = root[0][0][i1]
+
+        company = False
+        person = False
+        jobX = False
+        rubrique = False
+        subRubrique = False
+        i2 = 0
+        adress = False
+        adress2 = False
+        adress3 = False
+        city = False
+        country = False
+        tel = False
+        fax = False
+        email = False
+        website = False
+        job = False
+        person1 = False
+        person2 = False
+        person_tel = False
+
+        for cell in row:
+            if cell.attrib:
+                for key,value in cell.attrib.items():
+                    if 'Index' in key:
+                        i2 = int(value) -1
+            # attr = ["rubrique","subRubrique","company","adress",'adress2',"adress3","zipcode","city","country","tel","fax","email","website","job","person1","person2","person_tel"]
+
+            if i2 == 1: 
+                rubrique = cell[0].text
+            if i2 == 2:
+                subRubrique = cell[0].text
+            if i2 == 4:
+                company = cell[0].text
+            if i2 == 5:
+                adress = cell[0].text
+            if i2 == 6:
+                adress2 = cell[0].text
+            if i2 == 7:
+                adress3 = cell[0].text
+            if i2 == 8:
+                zipcode = cell[0].text
+            if i2 == 9:
+                city = cell[0].text
+            if i2 == 10:
+                country = cell[0].text
+            if i2 == 11:
+                tel = cell[0].text
+            if i2 == 12:
+                fax = cell[0].text
+            if i2 == 13:
+                email = cell[0].text
+            if i2 == 14:
+                website = cell[0].text
+            if i2 == 15:
+                job = cell[0].text
+            if i2 == 16:
+                person1 = cell[0].text
+            if i2 == 17:
+                person2 = cell[0].text
+            if i2 == 18:
+                person_tel = cell[0].text
+            i2 +=1
+
+            if person1 and person2:
+                fullName = person1+person2
+                if not person1 in nameList and not fullName in fullNameList:
+                    nameList.append(person1)
+                    fullNameList.append(fullName)
+                elif not fullName in fullNameList:
+                    fullNameList.append(fullName)
+                    homonymList.append(person1+' '+person2)
+                    try: 
+                        company = Company.objects.get(title=company)
+                        try: 
+                            u = Person.objects.filter(Q(title=person1) & Q(firstName=person2))
+                            u = u[0]
+                        except:
+                            u = Person(title=person1,firstName=person2,tel=person_tel)
+                            u.save()
+                        if job:
+                            try:
+                                jobX = Job.objects.get(title=job,person=u,company=company)
+                            except:
+                                jobX = Job(person=u,company=company,title=job)
+                                jobX.save()
+                    except:
+                        print "Company %s does not exist. %s %s is not added ..." % (company,person1,person2)
+
+        i1 +=1
+    print len(nameList)
+    print len(fullNameList)
+    print "homonymList [%s] = %s" % (len(homonymList),homonymList)
+    string = "["
+    for element in homonymList:
+        string += "\""+element+"\", "
+    string += "]"
+    return HttpResponse(string)
 
 def importXML(request,start,end):
     tree = ET.parse('liste.xml')
@@ -230,4 +418,5 @@ def importXML(request,start,end):
 
         i1 +=1
     return HttpResponse("IMPORT XML process ended.")
+
 

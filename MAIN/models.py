@@ -38,13 +38,20 @@ class Product(Page, RichText):
 
 class Brand(Page, RichText):
     products = models.ManyToManyField('Product',blank=True)
-    topics = models.ManyToManyField('Topic',blank=True)
+    # topics = models.ManyToManyField('Topic',blank=True)
     illustration = FileField(verbose_name=_("illustration"),
         upload_to=upload_to("MAIN.Brand.illustration", "brand"),
         format="Image", max_length=255, null=True, blank=True)
 
     def __unicode__(self):
-        return '%s' % (self.title)
+        products = Product.objects.filter(brand=self)
+        if products:
+            product_str = ''
+            for product in products:
+                product_str = product_str + product.title + ', '
+            return '%s | %s' % (self.title.upper(), product_str.lower())
+        else:
+            return '%s' % (self.title.upper())
 
     class Meta:
         verbose_name='MARQUE'
@@ -169,4 +176,5 @@ class Job(models.Model):
 
     class Meta:
         verbose_name='Employé'
+
 

@@ -20,7 +20,7 @@ class ProductAdmin(PageAdmin):
 brand_fieldsets = deepcopy(PageAdmin.fieldsets)
 brand_fieldsets[0][1]["fields"].insert(-1, "content")
 brand_fieldsets[0][1]["fields"].insert(-1, "products")
-brand_fieldsets[0][1]["fields"].insert(-1, "topics")
+#brand_fieldsets[0][1]["fields"].insert(-1, "topics")
 brand_fieldsets[0][1]["fields"].insert(-1, "illustration")
 class BrandAdmin(PageAdmin):
     # add lien rubrique
