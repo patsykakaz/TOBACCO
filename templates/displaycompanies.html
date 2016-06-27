@@ -16,8 +16,8 @@
             {% csrf_token %}
             <select name="topic">
             {% for cat in allCat %}
-                <option value="{{ cat.title }}">
-                {{cat.title}}
+                <option value="{{ cat.pk }}">
+                {{cat}}
                 </option>
             {% endfor %}
             </select>
@@ -112,7 +112,7 @@
                             {% if subsociete.sub_company.brands.all %}
                             <div class='marques'><b>PRODUITS </b>
                                 <div class='row'>
-                                {% for productType, brands in subsociete.sub_company.productList.items %}
+                                {% for productType, brands in subsociete.productList.items %}
                                     <div class='marque col-md-3'>
                                         <h4>{{ productType.title }}</h4>
                                         {% for brand in brands %}
@@ -145,35 +145,36 @@
                                     </div>
                                 {% endfor %}
                             </div>
-            {% if subsociete.filliales %}
+            {% if subsociete.subFilliales %}
                 <div style='margin-top:15px;'><b>FILLIALES</b></div>
                 <div class='allFilliales'>
-                {% for SubSubsociete in ssubociete.filliales %}
+
+                {% for SubSubSociete in subsociete.subFilliales %}
                     <div class='filliale' style='border-color:red;'>
-                        <h2>{{ SubSubsociete.sub_company.title }}</h2>
+                        <h2>{{ SubSubSociete.sub_company.title }}</h2>
                         <div class='row'>
-                            <div class='info col-md-6'>Adresse: {{ SubSubsociete.sub_company.adress }}</div>
-                            <div class='info col-md-6'> Code Postal: {{  SubSubsociete.sub_company.zipCode }}</div>
-                            <div class='info col-md-6'> BP: {{  SubSubsociete.sub_company.bp }}</div>
-                            <div class='info col-md-6'>ville: {{  SubSubsociete.sub_company.city }}</div>
-                            <div class='info col-md-6'>Région: {{  SubSubsociete.sub_company.area }}</div>
-                            <div class='info col-md-6'>Pays: {{  SubSubsociete.sub_company.country }}</div>
-                            <div class='info col-md-6'>EMail: {{ SubSubsociete.sub_company.email}}</div>
-                            <div class='info col-md-6'>Telephone: {{ SubSubsociete.sub_company.tel }}</div>
-                            <div class='info col-md-6'>Fax: {{ SubSubsociete.sub_company.fax }}</div>
-                            <div class='info col-md-6'>web: {{ SubSubsociete.sub_company.website}}</div>
+                            <div class='info col-md-6'>Adresse: {{ SubSubSociete.sub_company.adress }}</div>
+                            <div class='info col-md-6'> Code Postal: {{  SubSubSociete.sub_company.zipCode }}</div>
+                            <div class='info col-md-6'> BP: {{  SubSubSociete.sub_company.bp }}</div>
+                            <div class='info col-md-6'>ville: {{  SubSubSociete.sub_company.city }}</div>
+                            <div class='info col-md-6'>Région: {{  SubSubSociete.sub_company.area }}</div>
+                            <div class='info col-md-6'>Pays: {{  SubSubSociete.sub_company.country }}</div>
+                            <div class='info col-md-6'>EMail: {{ SubSubSociete.sub_company.email}}</div>
+                            <div class='info col-md-6'>Telephone: {{ SubSubSociete.sub_company.tel }}</div>
+                            <div class='info col-md-6'>Fax: {{ SubSubSociete.sub_company.fax }}</div>
+                            <div class='info col-md-6'>web: {{ SubSubSociete.sub_company.website}}</div>
                         </div>
-                        {% if not "false" in SubSubsociete.sub_company.content|richtext_filters|lower|safe %}
+                        {% if not "false" in SubSubSociete.sub_company.content|richtext_filters|lower|safe %}
                         <div class='row'>
                             <div class='col-md-10 col-md-offset-1' style='margin-top:10px; padding:3px 6px; background-color:rgb(230,230,230);'>
-                                {{ SubSubsociete.sub_company.content|richtext_filters|safe  }}
+                                {{ SubSubSociete.sub_company.content|richtext_filters|safe  }}
                             </div>
                         </div>
                         {% endif %}
-                        {% if SubSubsociete.sub_company.brands.all %}
+                        {% if SubSubSociete.sub_company.brands.all %}
                         <div class='marques'><b>PRODUITS </b>
                             <div class='row'>
-                            {% for productType, brands in SubSubsociete.sub_company.productList.items %}
+                            {% for productType, brands in SubSubSociete.productList.items %}
                                 <div class='marque col-md-3'>
                                     <h4>{{ productType.title }}</h4>
                                     {% for brand in brands %}
@@ -187,7 +188,7 @@
                         <div class='membres row'>
                             <div class='col-md-12 text-left' style='margin-top:15px; margin-bottom: 5px;'><b>EMPLOYES </b>
                             </div>
-                            {% for membre in SubSubsociete.employees %}
+                            {% for membre in SubSubSociete.employees %}
                                 <div class='col-md-3 col-sm-4 col-xs-6'>
                                     <div class='membre' style='margin-top:0; border-top:1px solid grey'>
                                         <h4>{{ membre.title }} {{ membre.firstName }}</h4>

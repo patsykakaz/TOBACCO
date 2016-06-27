@@ -19,11 +19,52 @@ from .models import *
 
 import xml.etree.ElementTree as ET
 
+def research(request):
+    topics = Topic.objects.all()
+    topic_filter = False
+    if request.POST and 'search' in request.POST:
+        data = True
+        # Search input must be at least 3 caracters long
+        if len(request.POST['search']) > 2:
+            # Check for model type if specified
+            if request.POST['model_type'] == "unspecified":
+                models = [Company,Person,Brand]
+                all_results = {'Company':0, 'Person':0, 'Brand':0}
+                words = (request.POST['search']).split(' ')
+                if 'topic' in request.POST:
+                    try:
+                        topic_filter = Topic.objects.get(title=request.POST['topic'])
+                    except:
+                        topic_filter = False
+                    # print "topic_filter = %s" % topic_filter
+                for word in words: 
+                    for model in models:
+                        if topic_filter and not model.__name__ == 'Person':
+                            # For Person[model] : check title AND firstName
+                            query = model.objects.filter(Q(title__icontains=word) & Q(topics=topic_filter) | Q(firstName__contains=word) & Q(topics=topic_filter))
+                        elif topic_filter:
+                            query = model.objects.filter(Q(title__icontains=word) & Q(topics=topic_filter))
+                            query.filter()
+                        # else:
+                            # query = False
+                        all_results[model.__name__] = query
+                
+                if len(all_results['Company']) == 0 and len(all_results['Person']) == 0 and len(all_results['Brand']) == 0:
+                    print "EMPTY"
+                    all_results = False
+                print "all Results = %s" % all_results
+            # else:
+            #     pass
+        else:
+            error = "Recherche trop courte"
+        print data
+    return render(request,'research.html',locals())
+
 def displayCompanies(request):
     if request.POST:
         try:
             cat = request.POST['topic']
-            topic = Topic.objects.get(title=cat)
+            topic = Topic.objects.get(pk=cat)
         except:
             return HttpResponse('Aucune catégorie correspondant à l\'entrée')
 
@@ -48,7 +89,8 @@ def displayCompanies(request):
 
             # product Listing
             company.productList = {}
-            for brand in company.brands.all():
+            # print "company %s has brands : %s \n if filter, brands : %s" % (company, len(company.brands.all()), len(company.brands.filter(topics=topic)))
+            for brand in company.brands.filter(topics=topic):
                 for product in brand.products.all():
                     if not product in company.productList:
                         company.productList[product] = [brand]
@@ -59,38 +101,44 @@ def displayCompanies(request):
             # FILLIALES [1]
             company.filliales = Subsidiary.objects.filter(top_company=company).order_by('sub_company')
             for filliale in company.filliales:
+
                 # product Listing
                 filliale.productList = {}
-                for brand in filliale.sub_company.brands.all():
+                # print type(filliale.sub_company)
+                # print "filliale : %s   has brands : %s" % (filliale.sub_company.title, len(filliale.sub_company.brands.filter(topics=topic)))
+                for brand in filliale.sub_company.brands.filter(topics=topic):
                     for product in brand.products.all():
                         if not product in filliale.productList:
                             filliale.productList[product] = [brand]
                         else:
                             filliale.productList[product].append(brand)
                 # ./
+
                 filliale.employees = Person.objects.filter(companies=filliale.sub_company)
                 for employee in filliale.employees:
                     try:
-                        employee.job = Job.objects.get(company=filliale,person=employees)
+                        employee.job = Job.objects.get(company=filliale.sub_company,person=employee)
                     except:
                         employee.job = False
 
                 # subFILLIALES [2]
                 filliale.subFilliales = Subsidiary.objects.filter(top_company=filliale.sub_company).order_by('sub_company')
                 for subFilliale in filliale.subFilliales:
+
                     # product Listing
                     subFilliale.productList = {}
-                    for brand in subFilliale.sub_company.brands.all():
+                    for brand in subFilliale.sub_company.brands.filter(topics=topic):
                         for product in brand.products.all():
                             if not product in subFilliale.productList:
                                 subFilliale.productList[product] = [brand]
                             else:
                                 subFilliale.productList[product].append(brand)
                     # ./
+
                     subFilliale.employees = Person.objects.filter(companies=subFilliale.sub_company)
                     for employee in subFilliale.employees:
                         try: 
-                            employee.job = Job.objects.get(company=subFilliale,person=employees)
+                            employee.job = Job.objects.get(company=subFilliale.sub_company,person=employee)
                         except:
                             employee.job = False
     else:

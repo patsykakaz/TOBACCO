@@ -12,8 +12,6 @@ from mezzanine.core.models import RichText
 from mezzanine.core.fields import RichTextField, FileField
 from mezzanine.utils.models import upload_to
 
-# !! PRODUIT !!
-
 
 class Product(Page, RichText):
     illustration = FileField(verbose_name=_("illustration"),
@@ -38,20 +36,23 @@ class Product(Page, RichText):
 
 class Brand(Page, RichText):
     products = models.ManyToManyField('Product',blank=True)
-    # topics = models.ManyToManyField('Topic',blank=True)
+    topics = models.ManyToManyField('Topic',blank=True)
     illustration = FileField(verbose_name=_("illustration"),
         upload_to=upload_to("MAIN.Brand.illustration", "brand"),
         format="Image", max_length=255, null=True, blank=True)
 
     def __unicode__(self):
+        motherCompany = Company.objects.filter(brands=self)
+        companies_str = ''
+        if motherCompany:
+            for X in motherCompany:
+                companies_str += X.title + ', '
         products = Product.objects.filter(brand=self)
+        product_str = ''
         if products:
-            product_str = ''
             for product in products:
-                product_str = product_str + product.title + ', '
-            return '%s | %s' % (self.title.upper(), product_str.lower())
-        else:
-            return '%s' % (self.title.upper())
+                product_str +=  product.title + ', '
+        return '%s | %s | %s' % (self.title.upper(), companies_str.lower(),  product_str.lower())
 
     class Meta:
         verbose_name='MARQUE'
@@ -171,6 +172,7 @@ class Job(models.Model):
     person = models.ForeignKey(Person,verbose_name='Employé')
     company = models.ForeignKey(Company)
     title = models.CharField(max_length=255,null=False,blank=True,verbose_name='intitulé du poste')
+    # rank = models.IntegerField(null=True,blank=True)
     since = models.DateField(auto_now=False,auto_now_add=False,null=True,blank=True,verbose_name='date d\'entrée en fonction')
     until = models.DateField(auto_now=False,auto_now_add=False,null=True,blank=True,verbose_name='date de fin de la fonction')
 

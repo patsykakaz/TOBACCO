@@ -38,6 +38,7 @@ urlpatterns += [
     # one out.
 
     url("^$", direct_to_template, {"template": "index.html"}, name="home"),
+    url(r'^research$', 'MAIN.views.research', name='research'),
     # url(r'^import/(?P<start>.+)/(?P<end>.+)/$', 'MAIN.views.importXML', name='import'),
     # url(r'^uuu$', 'MAIN.views.updateImportXML', name='uuu'),
     url(r'^print$', 'MAIN.views.displayCompanies', name='print'),
