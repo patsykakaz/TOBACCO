@@ -15,11 +15,12 @@
         <form method='POST' action=''>
             {% csrf_token %}
             <select name="topic">
-            {% for cat in allCat %}
-                <option value="{{ cat.pk }}">
-                {{cat}}
-                </option>
-            {% endfor %}
+                <option value='False'>sans catégorie</option>
+                {% for cat in allCat %}
+                    <option value="{{ cat.pk }}">
+                    {{cat}}
+                    </option>
+                {% endfor %}
             </select>
             <button type="submit" class="btn btn-primary" style='margin-top:10px;'>Envoyer
             </button>
@@ -46,6 +47,17 @@
                 <div class='row'>
                     <div class='col-md-10 col-md-offset-1' style='margin-top:10px; padding:3px 6px; background-color:rgb(230,230,230);'>
                         {{ societe.content|richtext_filters|safe  }}
+                    </div>
+                </div>
+                {% endif %}
+                {% if societe.topics.all|length  %}
+                <div class='topics' style='margin-top:20px;'><b> RUBRIQUES </b>
+                    <div class='row'>
+                    {% for topic in societe.topics.all %}
+                        <div class='col-md-4'>
+                            <h4>{{ topic }}</h4>
+                        </div>
+                    {% endfor %}
                     </div>
                 </div>
                 {% endif %}
@@ -109,6 +121,17 @@
                                 </div>
                             </div>
                             {% endif %}
+                            {% if subsociete.sub_company.topics.all|length  %}
+                            <div class='topics' style='margin-top:20px;'><b> RUBRIQUES </b>
+                                <div class='row'>
+                                {% for topic in subsociete.sub_company.topics.all %}
+                                    <div class='col-md-4'>
+                                        <h4>{{ topic }}</h4>
+                                    </div>
+                                {% endfor %}
+                                </div>
+                            </div>
+                            {% endif %}
                             {% if subsociete.sub_company.brands.all %}
                             <div class='marques'><b>PRODUITS </b>
                                 <div class='row'>
@@ -129,7 +152,7 @@
                                 {% for membre in subsociete.employees %}
                                     <div class='col-md-3 col-sm-4 col-xs-6'>
                                         <div class='membre' style='margin-top:0; border-top:1px solid grey'>
-                                            <h4>{{ membre.title }} {{ membre.firstName }}</h4>
+                                            <h4>{{ membre.firstName }} {{ membre.title }} </h4>
                                             {% if membre.illustration %}
                                                 <img src='{{ MEDIA_URL }}{% thumbnail membre.illustration 0 80 %}' />
                                             {% endif %}
@@ -171,6 +194,17 @@
                             </div>
                         </div>
                         {% endif %}
+                        {% if SubSubSociete.sub_company.topics.all|length  %}
+                        <div class='topics' style='margin-top:20px;'><b> RUBRIQUES </b>
+                            <div class='row'>
+                            {% for topic in SubSubSociete.sub_company.topics.all %}
+                                <div class='col-md-4'>
+                                    <h4>{{ topic }}</h4>
+                                </div>
+                            {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
                         {% if SubSubSociete.sub_company.brands.all %}
                         <div class='marques'><b>PRODUITS </b>
                             <div class='row'>
@@ -191,7 +225,7 @@
                             {% for membre in SubSubSociete.employees %}
                                 <div class='col-md-3 col-sm-4 col-xs-6'>
                                     <div class='membre' style='margin-top:0; border-top:1px solid grey'>
-                                        <h4>{{ membre.title }} {{ membre.firstName }}</h4>
+                                        <h4>{{ membre.firstName }} {{ membre.title }} </h4>
                                         {% if membre.illustration %}
                                             <img src='{{ MEDIA_URL }}{% thumbnail membre.illustration 0 80 %}' />
                                         {% endif %}

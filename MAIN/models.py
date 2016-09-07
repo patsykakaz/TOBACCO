@@ -155,6 +155,7 @@ class Person(Page, RichText):
     email = models.EmailField(null=False,blank=True)
     tel = models.CharField(max_length=255, null=False,blank=True)
     highlight = models.BooleanField(default=False,null=False,blank=True)
+    search_fields = ("title", "firstName") # static attr for search engine
 
     def __unicode__(self):
         return '%s %s' % (self.title.upper(), self.firstName.lower())

@@ -21,7 +21,7 @@
                 {% if values|length %}
                     <h1>{{ key }}</h1>
                     {% for result in values %}
-                    <h4>{{ result.title }}{% if result.firstName %}{{ result.firstName }}{% endif %}</h4>
+                    <h4>[{{ result.pk }}] {{ result.title }} {% if result.firstName %}{{ result.firstName }}{% endif %}</h4>
                     {% endfor %}
                 {% endif %}
             {% endfor %}
@@ -40,12 +40,19 @@
                 <option value="Company">Société</option>
                 <option value="Brand">Marque</option>
             </select>
-            <input type='text' name='search' placeholder="{% if words %} {{ words }} {% else %} search {% endif %}">
+            <input type='text' name='search' placeholder="{% if words %} {% for word in words %}{{ word|safe }} {% endfor %} {% else %} search {% endif %}">
             <br />
             <select name='topic'>
                 <option value=''>Rubrique</option>
                 {% for topic in topics %}
-                <option value='{{ topic.title }}'>{{ topic.title }}</option>
+                <option value='{{ topic.pk }}' {% if topic == topic_filter%}selected{% endif %}>{{ topic.title }}</option>
+                {% endfor %}
+            </select>
+            <br />
+            <select name='product'>
+                <option value=''>Produit</option>
+                {% for product in products %}
+                <option value='{{ product.pk }}' {% if product == product_filter%}selected{% endif %}>{{ product.title }}</option>
                 {% endfor %}
             </select>
             <button type="submit" class="btn btn-primary" style='margin-top:10px;'>

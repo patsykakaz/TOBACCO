@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import os
+from operator import ior, iand
 from PIL import Image
 
 from django.http import HttpResponse, HttpResponseRedirect
@@ -21,43 +22,72 @@ import xml.etree.ElementTree as ET
 
 def research(request):
     topics = Topic.objects.all()
-    topic_filter = False
+    products = Product.objects.all()
+    kk = Page.objects.all()
+    countries = []
+    for k in kk : 
+        try:
+            if k.country not in countries:
+                countries.append(k.country)
+        except:
+            pass
+    topic_filter,product_filter = False,False
     if request.POST and 'search' in request.POST:
         data = True
         # Search input must be at least 3 caracters long
         if len(request.POST['search']) > 2:
+            # Split string into separate words
+            words = (request.POST['search']).split(' ')
+            if 'topic' in request.POST: # Topic filter
+                try:
+                    topic_filter = Topic.objects.get(pk=request.POST['topic'])
+                except:
+                    topic_filter = False
+            if 'product' in request.POST:
+                try:
+                    product_filter = Product.objects.get(pk=request.POST['product'])
+                except:
+                    product_filter = False
+            # if 'location' in request.POST:
             # Check for model type if specified
-            if request.POST['model_type'] == "unspecified":
+            if request.POST['model_type'] == "Person":
+                models = [Person,]
+            elif request.POST['model_type'] == "Company":
+                models = [Company,]
+            elif request.POST['model_type'] == "Brand":
+                models = [Brand,]
+            else:
                 models = [Company,Person,Brand]
-                all_results = {'Company':0, 'Person':0, 'Brand':0}
-                words = (request.POST['search']).split(' ')
-                if 'topic' in request.POST:
-                    try:
-                        topic_filter = Topic.objects.get(title=request.POST['topic'])
-                    except:
-                        topic_filter = False
-                    # print "topic_filter = %s" % topic_filter
-                for word in words: 
-                    for model in models:
-                        if topic_filter and not model.__name__ == 'Person':
-                            # For Person[model] : check title AND firstName
-                            query = model.objects.filter(Q(title__icontains=word) & Q(topics=topic_filter) | Q(firstName__contains=word) & Q(topics=topic_filter))
-                        elif topic_filter:
-                            query = model.objects.filter(Q(title__icontains=word) & Q(topics=topic_filter))
-                            query.filter()
-                        # else:
-                            # query = False
-                        all_results[model.__name__] = query
-                
-                if len(all_results['Company']) == 0 and len(all_results['Person']) == 0 and len(all_results['Brand']) == 0:
-                    print "EMPTY"
-                    all_results = False
-                print "all Results = %s" % all_results
-            # else:
-            #     pass
+
+            all_results = {'Company':[], 'Person':[], 'Brand':[]}
+            
+            for model in models: # Iteration over models starting
+                query = model.objects.all() # Create a queryset with the given model
+                wordMagic = [reduce(ior,[Q(**{"%s__icontains" % f: w}) 
+                                        for f in model.search_fields])
+                                        for w in words] # Q every word in searchQuery
+                query = query.filter(reduce(ior, wordMagic)) # Filter queryset with optionnals
+                if topic_filter: # filter if topic is given
+                    if model == Person:
+                        for k in query: 
+                            if not len(Job.objects.filter(Q(person=k)&Q(company__topics=topic_filter))):
+                                query = query.exclude(pk=k.pk)
+                                # ALT ? altquery += k
+                    else:
+                        query = query.filter(topics=topic_filter)
+                if product_filter and model == Brand: # product_filter only applies to *Brand*
+                    query = query.filter(products=product_filter)
+                # if country_filter and model != Brand: # country only applies to *Person* and *company*
+                #     pass
+                # if zipcode_filter and model != Brand: # country only applies to *Person* and *company*
+                #     pass
+                all_results[model.__name__] += query
+            
+            if len(all_results['Company']) == 0 and len(all_results['Person']) == 0 and len(all_results['Brand']) == 0:
+                all_results = False # result EMPTY
         else:
             error = "Recherche trop courte"
-        print data
+
     return render(request,'research.html',locals())
 
 def displayCompanies(request):
@@ -66,7 +96,9 @@ def displayCompanies(request):
             cat = request.POST['topic']
             topic = Topic.objects.get(pk=cat)
         except:
-            return HttpResponse('Aucune catégorie correspondant à l\'entrée')
+            cat = "SOCIETE SANS CATEGORIE"
+            topic = None
+            # return HttpResponse('Aucune catégorie correspondant à l\'entrée')
 
         # CHECK FOR SUBSIDIARY FIRST TO AVOID REDUNDANCY IN PRINT_FRONT
         redundancyList = []
@@ -89,8 +121,11 @@ def displayCompanies(request):
 
             # product Listing
             company.productList = {}
-            # print "company %s has brands : %s \n if filter, brands : %s" % (company, len(company.brands.all()), len(company.brands.filter(topics=topic)))
-            for brand in company.brands.filter(topics=topic):
+            print "company %s has brands : %s \n if filter, brands : %s" % (company, len(company.brands.all()), len(company.brands.filter(topics=topic)))
+            # print company.title
+            # print len(Brand.objects.filter(Q(company=company)& Q(topics=topic)))
+            for brand in Brand.objects.filter(Q(company=company)& Q(topics=topic)):
+            # for brand in company.brands.filter(topics=topic):
                 for product in brand.products.all():
                     if not product in company.productList:
                         company.productList[product] = [brand]

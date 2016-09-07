@@ -1,28 +1,53 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n staticfiles %}
 
-{% block meta_title %}{% trans "Home" %}{% endblock %}
-{% block title %}{% trans "Home" %}{% endblock %}
+{% block meta_title %}ANNUAIRE DU TABAC{% endblock %}
 
-{% block breadcrumb_menu %}
-<li class="active">{% trans "Home" %}</li>
+
+{% block extra_css %}
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,900,300' rel='stylesheet' type='text/css'>
+    <style>
+        html{ 
+            background: url({% static "img/temp.jpg" %}) no-repeat center center fixed;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        body{
+            padding: 0;
+            background: none;
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        a, a:visited, a:hover{
+            color: rgb(246,87,55);
+            text-decoration: none;
+        }
+        @media screen and (max-width: 750px){
+            h4{
+                font-size: 15px;
+            }
+        }
+        @media screen and (max-width: 480px){
+            h4{
+                font-size: 12px;
+            }
+        }
+    </style>
 {% endblock %}
 
 {% block main %}
 {% blocktrans %}
-<h2>Congratulations!</h2>
-<p>
-    Welcome to your new Mezzanine powered website.
-    Here are some quick links to get you started:
-</p>
-<ul>
-    <li><a href="/admin/">Log in to the admin interface</a></li>
-    <li><a href="http://mezzanine.jupo.org/docs/content-architecture.html">Creating custom page types</a></li>
-    <li><a href="http://mezzanine.jupo.org/docs/frequently-asked-questions.html#templates">Modifying HTML templates</a></li>
-    <li><a href="http://mezzanine.jupo.org/docs/frequently-asked-questions.html#why-isn-t-the-homepage-a-page-object-i-can-edit-via-the-admin">Changing this homepage</a></li>
-    <li><a href="http://mezzanine.jupo.org/docs/frequently-asked-questions.html">Other frequently asked questions</a></li>
-    <li><a href="http://mezzanine.jupo.org/docs/configuration.html#default-settings">Full list of settings</a></li>
-    <li><a href="http://mezzanine.jupo.org/docs/deployment.html">Deploying to a production server</a></li>
-</ul>
+    <div class='text-center' style='position:fixed; top:0; left:0; width:100%; height:auto; padding:5px; background-color:rgba(255,255,255,.7); color:rgb(1,64,105);'>
+        <h4>
+            Bienvenue sur le site de l’annuaire de la <b>Revue des Tabacs</b>. <br />
+Le site est actuellement en construction, il sera disponible à la rentrée.<br />
+
+Vous pouvez nous contacter par email : <a href='mailto:annuaire@revuedestabacs.com'>annuaire@revuedestabacs.com</a> 
+        </h4>
+    </div>
 {% endblocktrans %}
 {% endblock %}
