@@ -4,6 +4,9 @@
 {% block extra_css %}
     <link rel="stylesheet" href="{% static "css/temp.css" %}">
 {% endblock %}
+{% block extra_js %}
+<script src="{% static "js/main.js" %}"></script>
+{% endblock %}
 
 {% block meta_title %}ANNUAIRE EN LIGNE{% endblock %}
 {% block title %}ANNUAIRE EN LIGNE{% endblock %}
@@ -88,41 +91,6 @@
         <h3 style='color: red;'>No Data Sent</h3>
     {% endif %}
 
-<script type="text/javascript">
-    $(document).ready(function(){
-
-        if($('#model_type').val() == 'Person'){
-           $("input[name='job']").fadeIn();
-        }
-        if($("#country").val() == "France"){
-            $("input[name='zipcode']").fadeIn();
-        }
-
-        $('#model_type').change(function(){
-            if($(this).val() == "Person"){
-                $("input[name='job']").fadeIn();
-            }else{
-                $("input[name='job']").fadeOut();
-            }
-        });
-
-        $("#country").change(function(){
-            if($(this).val() == "France"){
-                $("input[name='zipcode']").fadeIn();
-            }else{
-                $("input[name='zipcode']").fadeOut();
-            }
-        });
-
-        $('#topic').change(function(){
-            $('select[name="subtopic"]').css('display','none');
-            rel = $('#topic option:selected').val();
-            target = $('select[name="subtopic"][rel="'+rel+'"]');
-            target.fadeIn();
-        });
-
-    });
-</script>
 {% endblock %}
 
 

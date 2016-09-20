@@ -5,7 +5,7 @@
 .coverage
 settings.py
 local_settings.py
+**/migrations
 /static
 !/static/css
 !/static/js
-**/migrations
