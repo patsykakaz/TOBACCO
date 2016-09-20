@@ -21,24 +21,41 @@ from .models import *
 import xml.etree.ElementTree as ET
 
 def research(request):
-    topics = Topic.objects.all()
+    topics = Topic.objects.filter(parent=Page.objects.get(title='RUBRIQUES'))
+    for topic in topics: 
+        topic.subTopics = Topic.objects.filter(parent=topic)
     products = Product.objects.all()
-    kk = Page.objects.all()
     countries = []
-    for k in kk : 
+    companies = Company.objects.all()
+    for c in companies: 
         try:
-            if k.country not in countries:
-                countries.append(k.country)
+            if c.country not in countries:
+                countries.append(c.country)
         except:
             pass
-    topic_filter,product_filter = False,False
+    persons = Person.objects.all()
+    for p in persons:
+        try:
+            if p.country not in countries:
+                countries.append(p.country)
+        except:
+            pass
+    countries.remove('')
+    model_type = job_filter = topic_filter = product_filter = zipcode_filter = False
     if request.POST and 'search' in request.POST:
         data = True
+        model_type = request.POST['model_type']
         # Search input must be at least 3 caracters long
         if len(request.POST['search']) > 2:
             # Split string into separate words
             words = (request.POST['search']).split(' ')
-            if 'topic' in request.POST: # Topic filter
+            words[:] = (word for word in words if word != '')
+            if 'subtopic' in request.POST and request.POST['subtopic'] != "":
+                try:
+                    topic_filter = Topic.objects.get(pk=request.POST['topic'])
+                except:
+                    topic_filter = False
+            elif 'topic' in request.POST : # Topic filter
                 try:
                     topic_filter = Topic.objects.get(pk=request.POST['topic'])
                 except:
@@ -48,13 +65,19 @@ def research(request):
                     product_filter = Product.objects.get(pk=request.POST['product'])
                 except:
                     product_filter = False
-            # if 'location' in request.POST:
+            if 'country' in request.POST:
+                country_filter = request.POST['country']
+            if "zipcode" in request.POST:
+                zipcode_filter = request.POST['zipcode']
+
             # Check for model type if specified
-            if request.POST['model_type'] == "Person":
+            if model_type == "Person":
                 models = [Person,]
-            elif request.POST['model_type'] == "Company":
+                if 'job' in request.POST and len(request.POST['job']) > 2:
+                    job_filter = request.POST['job']
+            elif model_type == "Company":
                 models = [Company,]
-            elif request.POST['model_type'] == "Brand":
+            elif model_type == "Brand":
                 models = [Brand,]
             else:
                 models = [Company,Person,Brand]
@@ -63,29 +86,53 @@ def research(request):
             
             for model in models: # Iteration over models starting
                 query = model.objects.all() # Create a queryset with the given model
+                alt_query = []
                 wordMagic = [reduce(ior,[Q(**{"%s__icontains" % f: w}) 
                                         for f in model.search_fields])
                                         for w in words] # Q every word in searchQuery
                 query = query.filter(reduce(ior, wordMagic)) # Filter queryset with optionnals
+                if model == Person and job_filter:
+                    for k in query:
+                        if not len(Job.objects.filter(Q(person=k) & Q(title__icontains=job_filter))):
+                            query = query.exclude(pk=k.pk)
+                            alt_query.append(k)
                 if topic_filter: # filter if topic is given
                     if model == Person:
-                        for k in query: 
-                            if not len(Job.objects.filter(Q(person=k)&Q(company__topics=topic_filter))):
+                        for k in query:
+                            # exclude all Person not owning a job associated w/ a company that fulfills the topic_filter herself
+                            if not len(Job.objects.filter(Q(person=k) & Q(company__topics=topic_filter))):
                                 query = query.exclude(pk=k.pk)
-                                # ALT ? altquery += k
+                                alt_query.append(k)
                     else:
+                        if len(query.exclude(topics=topic_filter)):
+                            alt_query += list(query.exclude(topics=topic_filter))
                         query = query.filter(topics=topic_filter)
                 if product_filter and model == Brand: # product_filter only applies to *Brand*
+                    if len(query.exclude(products=product_filter)):
+                        alt_query += list(query.exclude(products=product_filter))
                     query = query.filter(products=product_filter)
-                # if country_filter and model != Brand: # country only applies to *Person* and *company*
-                #     pass
-                # if zipcode_filter and model != Brand: # country only applies to *Person* and *company*
-                #     pass
+                elif product_filter and model == Company:
+                    # fetch Companies that owns Brand that owns the product type. 
+                    brand_filter = Brand.objects.filter(products=product_filter)
+                    KK = query.filter(brands__in=brand_filter)
+                    query = KK.distinct()
+                    # print "product filtered query is -> %s" % KK
+                if country_filter and model != Brand:
+                # country only applies to *Person* and *company*
+                    if len(query.exclude(country=country_filter)):
+                        alt_query += list(query.exclude(country=country_filter))
+                    query = query.filter(country=country_filter)
+                if country_filter and zipcode_filter and model != Brand:
+                # country only applies to *Person* and *company*
+                    if len(query.exclude(zipCode__startswith=zipcode_filter)):
+                        alt_query += list(query.exclude(zipCode__startswith=zipcode_filter))
+                    query = query.filter(zipCode__startswith=zipcode_filter)
                 all_results[model.__name__] += query
-            
+
             if len(all_results['Company']) == 0 and len(all_results['Person']) == 0 and len(all_results['Brand']) == 0:
                 all_results = False # result EMPTY
         else:
+            data = False
             error = "Recherche trop courte"
 
     return render(request,'research.html',locals())

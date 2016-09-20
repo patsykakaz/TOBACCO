@@ -1,66 +1,128 @@
-{# {% extends "base.html" %} #}
+{% extends "base.html" %}
 {% load pages_tags mezzanine_tags i18n staticfiles %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static "css/temp.css" %}">
 {% endblock %}
 
-{% block meta_title %}TEST{% endblock %}
-{% block title %}TEST{% endblock %}
+{% block meta_title %}ANNUAIRE EN LIGNE{% endblock %}
+{% block title %}ANNUAIRE EN LIGNE{% endblock %}
 
 
 {% block main %}
-    
+
+    <div id='search'>
+        <form method='POST' action=''>
+        {% csrf_token %}
+            <select id='model_type' name='model_type'>
+                <option value="unspecified">Vous recherchez ?</option>
+                <option value="Person" {% if model_type == 'Person' %}selected{% endif %}>Personne</option>
+                <option value="Company" {% if model_type == 'Company' %}selected{% endif %}>Société</option>
+                <option value="Brand" {% if model_type == 'Brand' %}selected{% endif %}>Marque</option>
+            </select>
+            <input type='text' name='search' placeholder="{% if words %}{% for word in words %}{{ word|safe }} {% endfor %}{% else %}search {% endif %}" />
+            <br />
+            <input type='text' name='job' placeholder="poste" style='display:none;'/>
+            <br />
+            <select id='topic' name='topic'>
+                <option value=''>Rubrique</option>
+                {% for topic in topics %}
+                <option value='{{ topic.pk }}' {% if topic == topic_filter%}selected{% endif %}>{{ topic.title }}</option>
+                {% endfor %}
+            </select>
+            {% for topic in topics %}
+            {% if topic.subTopics %}
+                <select name='subtopic' rel='{{ topic.pk }}' style='display:none;'>
+                    <option value=''>sous-rubrique</option>
+                    {% for subTopic in topic.subTopics %}
+                        <option>{{ subTopic.title }}</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+            {% endfor %}
+            <br />
+            <select name='product'>
+                <option value=''>Produit</option>
+                {% for product in products %}
+                <option value='{{ product.pk }}' {% if product == product_filter %}selected{% endif %}>{{ product.title }}</option>
+                {% endfor %}
+            </select>
+            <br />
+            <select id='country' name='country'>
+                <option value=''>Pays</option>
+                {% for country in countries %}
+                <option value='{{ country }}' {% if country == country_filter%}selected{% endif %}>{{ country }}</option>
+                {% endfor %}
+            </select>
+            <br />
+            <input type='text' name='zipcode' placeholder="{% if zipcode %} {{ zipcode }} {% else %} Département {% endif %}" style='display:none;'>
+            <button type="submit" class="btn btn-primary" style='margin-top:10px;'>
+                <i class='fa fa-paper-plane'></i> Envoyer
+            </button>
+        </form>
+    </div>
+    <div style='margin-top: 40px;'></div>
     {% if data %}
-        <h1>ALL RESULTS </h1>
+        <h2> RESULTS [{{ query|length }}] </h2>
         {% if not all_results %}
             <div>Aucun résultat trouvé</div>
         {% else %}
         <p>
             {% for key,values in all_results.items %}
                 {% if values|length %}
-                    <h1>{{ key }}</h1>
+                    <h4>{{ key }}</h4>
                     {% for result in values %}
-                    <h4>[{{ result.pk }}] {{ result.title }} {% if result.firstName %}{{ result.firstName }}{% endif %}</h4>
+                    <h5>[{{ result.pk }}] {{ result.title }} {% if result.firstName %}{{ result.firstName }}{% endif %}</h5>
                     {% endfor %}
                 {% endif %}
             {% endfor %}
         </p>
         {% endif %}
+        {% if alt_query %}
+            <h2 style='margin-top:30px;'> ALT RESULTS [{{ alt_query|length }}] </h2>
+            {% for result in alt_query %}
+                <h5>[{{ result.pk }}] {{ result.title }} {% if result.firstName %}{{ result.firstName }}{% endif %}</h5>
+            {% endfor %}
+        {% endif %}
     {% else %}
-        <h2>No Data Sent</h2>
+        <h3 style='color: red;'>No Data Sent</h3>
     {% endif %}
 
-    <div id='search'>
-        <form method='POST' action=''>
-        {% csrf_token %}
-            <select name='model_type'>
-                <option value="unspecified">Vous recherchez ?</option>
-                <option value="Person">Personne</option>
-                <option value="Company">Société</option>
-                <option value="Brand">Marque</option>
-            </select>
-            <input type='text' name='search' placeholder="{% if words %} {% for word in words %}{{ word|safe }} {% endfor %} {% else %} search {% endif %}">
-            <br />
-            <select name='topic'>
-                <option value=''>Rubrique</option>
-                {% for topic in topics %}
-                <option value='{{ topic.pk }}' {% if topic == topic_filter%}selected{% endif %}>{{ topic.title }}</option>
-                {% endfor %}
-            </select>
-            <br />
-            <select name='product'>
-                <option value=''>Produit</option>
-                {% for product in products %}
-                <option value='{{ product.pk }}' {% if product == product_filter%}selected{% endif %}>{{ product.title }}</option>
-                {% endfor %}
-            </select>
-            <button type="submit" class="btn btn-primary" style='margin-top:10px;'>
-                <i class='fa fa-paper-plane'></i> Envoyer
-            </button>
-        </form>
-    </div>
+<script type="text/javascript">
+    $(document).ready(function(){
 
+        if($('#model_type').val() == 'Person'){
+           $("input[name='job']").fadeIn();
+        }
+        if($("#country").val() == "France"){
+            $("input[name='zipcode']").fadeIn();
+        }
+
+        $('#model_type').change(function(){
+            if($(this).val() == "Person"){
+                $("input[name='job']").fadeIn();
+            }else{
+                $("input[name='job']").fadeOut();
+            }
+        });
+
+        $("#country").change(function(){
+            if($(this).val() == "France"){
+                $("input[name='zipcode']").fadeIn();
+            }else{
+                $("input[name='zipcode']").fadeOut();
+            }
+        });
+
+        $('#topic').change(function(){
+            $('select[name="subtopic"]').css('display','none');
+            rel = $('#topic option:selected').val();
+            target = $('select[name="subtopic"][rel="'+rel+'"]');
+            target.fadeIn();
+        });
+
+    });
+</script>
 {% endblock %}
 
 

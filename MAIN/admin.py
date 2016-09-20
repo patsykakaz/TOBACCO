@@ -10,7 +10,6 @@ from mezzanine.blog.models import BlogPost
 
 # !! PRODUIT !!
 
-
 class ProductAdmin(PageAdmin):
     allFields = deepcopy(PageAdmin.fieldsets)
     allFields[0][1]["fields"].insert(-1, "content")
