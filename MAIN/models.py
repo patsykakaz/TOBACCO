@@ -176,6 +176,7 @@ class Job(models.Model):
     # rank = models.IntegerField(null=True,blank=True)
     since = models.DateField(auto_now=False,auto_now_add=False,null=True,blank=True,verbose_name='date d\'entrée en fonction')
     until = models.DateField(auto_now=False,auto_now_add=False,null=True,blank=True,verbose_name='date de fin de la fonction')
+    search_fields = ("title", "company__title")
 
     class Meta:
         verbose_name='Employé'

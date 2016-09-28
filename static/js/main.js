@@ -31,9 +31,13 @@ $(document).ready(function(){
         target.fadeIn();
     });
 
+    ResultBox();
+
 });
 
 
 
-
+function ResultBox(){
+    $('.resultBox').height($('.resultBox').outerWidth());
+}
 

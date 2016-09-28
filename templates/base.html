@@ -16,9 +16,9 @@
 {% endifinstalled %}
 
 {% compress css %}
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
 <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
 <link rel="stylesheet" href="{% static "css/mezzanine.css" %}">
-<link rel="stylesheet" href="{% static "css/bootstrap-theme.css" %}">
 {% if LANGUAGE_BIDI %}
 <link rel="stylesheet" href="{% static "css/bootstrap-rtl.css" %}">
 {% endif %}
@@ -49,6 +49,16 @@
 <body id="{% block body_id %}body{% endblock %}">
 
 
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                ANNUAIRE DU TABAC
+            </a>
+        </div>
+    </div>
+</nav>
+
 <div class="container">
 
 {% nevercache %}
@@ -64,25 +74,11 @@
 {% endif %}
 {% endnevercache %}
 
-<h1>{% block title %}{% endblock %}</h1>
-
-{# <ul class="breadcrumb"> #}
-{# {% spaceless %} #}
-{# {% block breadcrumb_menu %}{% page_menu "pages/menus/breadcrumb.html" %}{% endblock %} #}
-{# {% endspaceless %} #}
-{# </ul> #}
+{# {% block title %}{% endblock %} #}
 
 </div>
 
-<div class="container">
-<div class="row">
-
-<div class="col-md-10 col-md-offset-1 middle">
-    {% block main %}{% endblock %}
-</div>
-
-</div>
-</div>
+{% block main %}{% endblock %}
 
 <!-- <footer>
 <div class="container">

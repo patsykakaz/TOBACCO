@@ -2,95 +2,147 @@
 {% load pages_tags mezzanine_tags i18n staticfiles %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static "css/temp.css" %}">
+    <link rel="stylesheet" href="{% static "css/bootstrap.override.css" %}">
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
 {% endblock %}
 {% block extra_js %}
 <script src="{% static "js/main.js" %}"></script>
 {% endblock %}
 
 {% block meta_title %}ANNUAIRE EN LIGNE{% endblock %}
-{% block title %}ANNUAIRE EN LIGNE{% endblock %}
-
 
 {% block main %}
 
-    <div id='search'>
-        <form method='POST' action=''>
-        {% csrf_token %}
-            <select id='model_type' name='model_type'>
-                <option value="unspecified">Vous recherchez ?</option>
-                <option value="Person" {% if model_type == 'Person' %}selected{% endif %}>Personne</option>
-                <option value="Company" {% if model_type == 'Company' %}selected{% endif %}>Société</option>
-                <option value="Brand" {% if model_type == 'Brand' %}selected{% endif %}>Marque</option>
-            </select>
-            <input type='text' name='search' placeholder="{% if words %}{% for word in words %}{{ word|safe }} {% endfor %}{% else %}search {% endif %}" />
-            <br />
-            <input type='text' name='job' placeholder="poste" style='display:none;'/>
-            <br />
-            <select id='topic' name='topic'>
-                <option value=''>Rubrique</option>
-                {% for topic in topics %}
-                <option value='{{ topic.pk }}' {% if topic == topic_filter%}selected{% endif %}>{{ topic.title }}</option>
-                {% endfor %}
-            </select>
-            {% for topic in topics %}
-            {% if topic.subTopics %}
-                <select name='subtopic' rel='{{ topic.pk }}' style='display:none;'>
-                    <option value=''>sous-rubrique</option>
-                    {% for subTopic in topic.subTopics %}
-                        <option>{{ subTopic.title }}</option>
+{% block title %}<h1 class='text-center'>L'ANNUAIRE DU TABAC</h1>{% endblock %}
+
+<div id='search' class='container'>
+
+    <div class='row' class='text-center'>
+        <div id='form_container' class='col-md-12 col-md-offset-0'>
+            <form method='POST' action=''>
+            {% csrf_token %}
+                <div class="form-group col-md-6">
+                    <select id='model_type' name='model_type'>
+                        <option value="unspecified">Vous recherchez ?</option>
+                        <option value="Person" {% if model_type == 'Person' %}selected{% endif %}>Personne</option>
+                        <option value='Job' {% if model_type == 'Job' %}selected{% endif %}>Poste</option>
+                        <option value="Company" {% if model_type == 'Company' %}selected{% endif %}>Société</option>
+                        <option value="Brand" {% if model_type == 'Brand' %}selected{% endif %}>Marque</option>
+                        <option value="Product" {% if model_type == 'Product' %}selected{% endif %}>Produit</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <input type='text' name='search' placeholder="{% if words %}{% for word in words %}{{ word|safe }} {% endfor %}{% else %}Mots-clés {% endif %}" />
+                    <input type='text' name='job' placeholder="poste" style='display:none;'/>
+                </div>
+
+                <div id='search_separator' class='col-md-12'></div>
+
+                <div class='form-group col-lg-6 col-md-6'>
+                    <select id='topic' name='topic'>
+                        <option value=''>Rubrique</option>
+                        {% for topic in topics %}
+                        <option value='{{ topic.pk }}' {% if topic == topic_filter%}selected{% endif %}>{{ topic.title }}</option>
+                        {% endfor %}
+                    </select>
+                    {% for topic in topics %}
+                    {% if topic.subTopics %}
+                        <select name='subtopic' rel='{{ topic.pk }}' style='display:none;'>
+                            <option value=''>sous-rubrique</option>
+                            {% for subTopic in topic.subTopics %}
+                                <option>{{ subTopic.title }}</option>
+                            {% endfor %}
+                        </select>
+                    {% endif %}
                     {% endfor %}
-                </select>
-            {% endif %}
-            {% endfor %}
-            <br />
-            <select name='product'>
-                <option value=''>Produit</option>
-                {% for product in products %}
-                <option value='{{ product.pk }}' {% if product == product_filter %}selected{% endif %}>{{ product.title }}</option>
-                {% endfor %}
-            </select>
-            <br />
-            <select id='country' name='country'>
-                <option value=''>Pays</option>
-                {% for country in countries %}
-                <option value='{{ country }}' {% if country == country_filter%}selected{% endif %}>{{ country }}</option>
-                {% endfor %}
-            </select>
-            <br />
-            <input type='text' name='zipcode' placeholder="{% if zipcode %} {{ zipcode }} {% else %} Département {% endif %}" style='display:none;'>
-            <button type="submit" class="btn btn-primary" style='margin-top:10px;'>
-                <i class='fa fa-paper-plane'></i> Envoyer
-            </button>
-        </form>
+                </div>
+                <div class='form-group col-lg-6 col-md-6'>
+                    <select name='product'>
+                        <option value=''>Produit</option>
+                        {% for product in products %}
+                        <option value='{{ product.pk }}' {% if product == product_filter %}selected{% endif %}>{{ product.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class='form-group col-lg-6 col-md-6'>
+                    <select id='country' name='country'>
+                        <option value=''>Pays</option>
+                        {% for country in countries %}
+                        <option value='{{ country }}' {% if country == country_filter%}selected{% endif %}>{{ country }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type='text' name='zipcode' placeholder="{% if zipcode %} {{ zipcode }} {% else %} Département {% endif %}" style='display:none;'>
+                </div>
+                <div class="form-group col-md-12">
+                    <button type="submit" class="btn btn-default" style='margin-top:10px;'>
+                        <i class='fa fa-paper-plane'></i> Envoyer
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-    <div style='margin-top: 40px;'></div>
+
     {% if data %}
-        <h2> RESULTS [{{ query|length }}] </h2>
-        {% if not all_results %}
-            <div>Aucun résultat trouvé</div>
-        {% else %}
-        <p>
-            {% for key,values in all_results.items %}
-                {% if values|length %}
-                    <h4>{{ key }}</h4>
-                    {% for result in values %}
+        <div id='results' class='row' style='margin-top: 40px;'>
+            <h3 class='text-center'> {{ query|length }} résultats pour la recherche : </h3>
+            <div class='text-muted text-center' style='margin: 10px 0'>placer ici termes de la recherche</div>
+            {% if not all_results %}
+                <div>Aucun résultat trouvé.</div>
+            {% else %}
+            <div class='text-center'>
+                <!-- Nav tabs -->
+                <ul class="nav nav-pills {% if all_results|length <= 1 %} hide {% endif %}" role="tablist">
+                {% for key in all_results.keys %}
+                    <li role="presentation" {% if forloop.counter == 1 %}class="active"{% endif %}><a href="#{{ key }}" aria-controls="{{ key }}" role="tab" data-toggle="tab">{{ key }}</a></li>
+                {% endfor %}
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                {% for key, values in all_results.items %}
+                    {% if values|length %}
+                        <div role="tabpanel" class="tab-pane {% if forloop.counter == 1%}active{% endif %}" id="{{ key }}">
+                        {% for result in values %}
+                            <div class='col-lg-3 col-md-4 col-sm-6 col-xs-6'>
+                                <div class='resultBox'>
+                                        <h3 class='text-center'>{{ result.title }}</h3>
+                                        {% if key == "Person" %}
+                                            <h3 class='text-center'>{{ result.firstName }}</h3>
+                                        {% elif key == "Company" %}
+                                            <div class='company_topics'>
+                                                {% for topic in result.topics.all|slice:":3" %}
+                                                    <div class='company_topic'><i class='fa fa-angle-right'></i> {{ topic.title }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        {% elif key == "Brand" %}
+                                        {% elif key == "Product" %}
+                                        {% elif key == "Job" %}
+                                            <h3 class='text-center'>@ {{ result.company.title }}</h3>
+                                            <div class='job_person'>
+                                                {{ result.person.title }}
+                                                {{ result.person.firstName }}
+                                            </div>
+                                        {% endif %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            {% if alt_query %}
+                <h3 class='text-center' style='margin-top:30px;'> {{ alt_query|length }} résultats alternatifs </h3>
+                {% for result in alt_query %}
                     <h5>[{{ result.pk }}] {{ result.title }} {% if result.firstName %}{{ result.firstName }}{% endif %}</h5>
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
-        </p>
-        {% endif %}
-        {% if alt_query %}
-            <h2 style='margin-top:30px;'> ALT RESULTS [{{ alt_query|length }}] </h2>
-            {% for result in alt_query %}
-                <h5>[{{ result.pk }}] {{ result.title }} {% if result.firstName %}{{ result.firstName }}{% endif %}</h5>
-            {% endfor %}
-        {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
     {% else %}
-        <h3 style='color: red;'>No Data Sent</h3>
+        <h3 style='color: red;'>Recherche inexistante ou trop courte.</h3>
     {% endif %}
 
+</div>
 {% endblock %}
 
 

@@ -1,4 +1,51 @@
 
-h2{
-    color: red;
+
+body{
+    padding: 0 0 30px 0;
+    background-color: #FFFFFF;
+    font-family: 'Open Sans', sans-serif;
+}
+
+h1{
+    margin-bottom: 25px;
+    color: rgb(174,17,28);
+}
+
+#search{}
+#form_container{
+    padding: 30px 0 10px 0;
+    border: 1px solid rgb(174,17,28);
+}
+
+#search_separator{
+    margin-bottom: 15px;
+    border-bottom: 2px dotted rgb(240,240,240);
+}
+
+#results{
+    padding: 20px;
+    background-color: #f8f8f8;
+    border: 1px solid #e7e7e7;
+}
+#results .nav.nav-pills{
+    display: inline-block;
+    width: auto;
+    margin: auto;
+}
+.resultBox{
+    height: 300px;
+    margin: 20px 10px;
+    padding: 10px;
+    background-color: #FFFFFF;
+    border: 1px solid #e7e7e7;
+}.resultBox h3{
+    display: inline-block;
+    margin: 0;
+    font-size: 15px;
+    color: #428bca;
+}
+.resultBox .company_topics{
+    display: inline-block;
+    margin-right: 4px;
+    font-size: 12px;
 }
