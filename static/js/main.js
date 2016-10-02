@@ -1,6 +1,11 @@
 
 $(document).ready(function(){
 
+    $('#main_search_container').outerWidth(
+            $('#form_container').width()
+            - ($('.form-group.col-md-6').width() - $('#topic').width())
+        );
+
     if($('#model_type').val() == 'Person'){
        $("input[name='job']").fadeIn();
     }
@@ -35,6 +40,13 @@ $(document).ready(function(){
 
 });
 
+$(window).resize(function(){
+    $('#main_search_container').outerWidth(
+            $('#form_container').width()
+            - ($('.form-group.col-md-6').width() - $('#topic').width())
+        );
+    resultBox();
+});
 
 
 function ResultBox(){

@@ -99,7 +99,7 @@ def research(request):
                                 'Product':[],
                         }
 
-                
+                count = 0
                 for model in models: # Iteration over models starting
                     query = model.objects.all() # Create a queryset with the given model
                     alt_query = []
@@ -133,7 +133,7 @@ def research(request):
                         brand_filter = Brand.objects.filter(products=product_filter)
                         KK = query.filter(brands__in=brand_filter)
                         query = KK.distinct()
-                    if country_filter and model != Brand:
+                    if country_filter and model in [Company,Person]:
                     # country filter only applies to *Person* and *company*
                         if len(query.exclude(country=country_filter)):
                             alt_query += list(query.exclude(country=country_filter))
@@ -146,6 +146,7 @@ def research(request):
 
                     if len(query) > 0:
                         all_results[model.__name__] += query
+                        count += len(query)
                     else:
                         del all_results[model.__name__]
                     # for key,values in all_results.items(): 

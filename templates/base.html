@@ -17,8 +17,10 @@
 
 {% compress css %}
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
 <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
 <link rel="stylesheet" href="{% static "css/mezzanine.css" %}">
+<link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
 {% if LANGUAGE_BIDI %}
 <link rel="stylesheet" href="{% static "css/bootstrap-rtl.css" %}">
 {% endif %}
@@ -53,7 +55,7 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="#">
-                ANNUAIRE DU TABAC
+                <img src='{% static "img/logo_small.png" %}' alt='logo annuaire du tabac'>
             </a>
         </div>
     </div>
@@ -80,10 +82,10 @@
 
 {% block main %}{% endblock %}
 
-<!-- <footer>
-<div class="container">
-</div>
-</footer> -->
+<footer>
+    <div class="container">
+    </div>
+</footer>
 
 {% block footer_js %}
 {% include "includes/footer_scripts.html" %}
