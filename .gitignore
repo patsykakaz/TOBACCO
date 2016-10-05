@@ -6,7 +6,7 @@
 settings.py
 local_settings.py
 **/migrations
-/static
+/static/*
 !/static/css
 !/static/js
 !/static/fonts

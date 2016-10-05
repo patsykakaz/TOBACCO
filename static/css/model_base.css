@@ -1,0 +1,12 @@
+strong{
+    margin-bottom: 20px;
+}
+h1{
+    font-weight: bold;
+}
+.company_sub{
+    display: inline-block;
+    margin: 5px 10px 5px 0;
+    padding: 7px 10px;
+    background-color: #f8f8f8;
+}

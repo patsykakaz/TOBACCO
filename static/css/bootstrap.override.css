@@ -1,0 +1,47 @@
+
+.navbar-default{
+    background-color: #FFFFFF;
+}
+
+textarea:focus, input:focus, .uneditable-input:focus,
+select:focus{   
+    border-color: rgb(174,17,28) !important;
+    box-shadow: 0 1px 1px rgba(174,17,28,.7) inset, 0 0 8px rgba(174,17,28,.7) !important;
+    outline: 0 none !important;
+}
+
+.form-group,
+.form-group > input[type="text"], .form-group > input[type="password"], .form-group > input[type="datetime"], .form-group > input[type="datetime-local"], .form-group > input[type="date"], .form-group > input[type="month"], .form-group > input[type="time"], .form-group > input[type="week"], .form-group > input[type="number"], .form-group > input[type="email"], .form-group > input[type="url"], .form-group > input[type="search"], .form-group > input[type="tel"], .form-group > input[type="color"], .form-group > select, .form-group > textarea{
+    display: inline-block;
+    text-align: center;
+}
+
+#nav-pills-container{
+    border-bottom: 2px dotted #eee;
+}
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover, .nav-pills > li.active > a:focus{
+}
+
+.navbar-logo, .navbar-logo:hover,
+.navbar-logo:visited{
+    float: left;
+    overflow: hidden;
+    padding: 5px 0;
+    color: rgb(174,17,28);
+    font-weight: bolder;
+    text-decoration: none;
+}
+.navbar-logo img{
+    height: 50px;
+    padding-right: 20px;
+}
+
+#search .btn-default{
+    background-color: rgb(174,17,28);
+    border: none;
+    color: white;
+}#search .btn-default i{
+    color: white;
+}
+
+
