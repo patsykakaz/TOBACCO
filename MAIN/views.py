@@ -163,6 +163,9 @@ def research(request):
         else:
             data = False
             error = "Recherche trop courte"
+    else:
+        data = False
+        error = False
 
     return render(request,'research.html',locals())
 

@@ -16,11 +16,13 @@
 {% endifinstalled %}
 
 {% compress css %}
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Comfortaa:400,700" rel="stylesheet">
 <link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
 <link rel="stylesheet" href="{% static "css/mezzanine.css" %}">
 <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/bootstrap.override.css" %}">
+    <link rel="stylesheet" href="{% static "css/main.css" %}">
 {% if LANGUAGE_BIDI %}
 <link rel="stylesheet" href="{% static "css/bootstrap-rtl.css" %}">
 {% endif %}
@@ -54,8 +56,9 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-logo" href="/">
                 <img src='{% static "img/logo_small.png" %}' alt='logo annuaire du tabac'>
+                La base de donnée professionnelle du tabac et du marché des buralistes
             </a>
         </div>
     </div>
@@ -83,7 +86,8 @@
 {% block main %}{% endblock %}
 
 <footer>
-    <div class="container">
+    <div class="container text-center">
+        La base de donnée professionnelle du tabac et du marché des buralistes
     </div>
 </footer>
 

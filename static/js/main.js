@@ -37,7 +37,16 @@ $(document).ready(function(){
     });
 
     ResultBox();
+    $('#deploy_secondary').click(function(){
+        $('#secondary_search_container').addClass('deploy');
+        $(this).addClass('hide');
+    });
 
+    $('#main_search_input').focus();
+
+    // if($('body').height()<=$(window).height()){
+    //     $('footer').css('margin-top',$(window).height()-$('body').height());
+    // }
 });
 
 $(window).resize(function(){
