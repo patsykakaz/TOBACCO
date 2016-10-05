@@ -4,8 +4,8 @@
 {% block main %}
     <div id='main' class='container'>
         <div class='row'>
-            <h2 style='color:grey'>Société</h2>
-            <h1 class='text-center' style='margin-bottom:100px;'>{{ company.title }}</h1>
+            <h3 class='text-center' style='margin-bottom:0; color:grey'>Société</h3>
+            <h1 class='text-center' style='margin:10px 0 100px 0;'>{{ company.title }}</h1>
             {% if company.illustration %}
                 <div class='col-md-5 col-md-offset-1 illustration text-center'>
                 <div class='illustration'>
@@ -35,6 +35,9 @@
                         {% for brand in company.brands.all|slice:"6" %}
                             <a href='{{ brand.get_absolute_url }}'>{{ brand.title }}</a> |
                         {% endfor %}
+                        {% if company.brands.all|length > 6 %}
+                            <i class='fa fa-ellipsis-h'></i>
+                        {% endif %}
                     </div>
                 {% endif %}
                 <div class='separator'></div>

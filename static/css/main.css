@@ -149,10 +149,10 @@ a{
 }
 
 .company_topics{
-    margin: 0 3px 0 5px;
+    /*margin: 0 3px 0 5px;*/
 }.company_topic{
     display: inline-block;
-    margin-left: 4px;
+    margin-right: 4px;
     font-size: 12px;
 }
 .company_brands{
