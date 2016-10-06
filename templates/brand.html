@@ -2,75 +2,78 @@
 {% load pages_tags mezzanine_tags i18n staticfiles %}
 
 {% block main %}
+    {% for x in twin_brands %}
+        {{ x.title }}
+    {% endfor %}
     <div id='main' class='container'>
         <div class='row'>
-            <h3 class='text-center' style='margin-bottom:0; color:grey'>Société</h3>
-            <h1 class='text-center' style='margin:10px 0 100px 0;'>{{ company.title }}</h1>
-            {% if company.illustration %}
+            <h3 class='text-center' style='margin-bottom:0; color:grey'>Marque</h3>
+            <h1 class='text-center' style='margin:10px 0 100px 0;'>{{ brand.title }}</h1>
+            {% if brand.illustration %}
                 <div class='col-md-5 col-md-offset-1 illustration text-center'>
                 <div class='illustration'>
-                    <img src='{{ MEDIA_URL }}{% thumbnail company.illustration 300 400 %}' class='img-thumbnail' alt='illustration {{ company.title }}' />
+                    <img src='{{ MEDIA_URL }}{% thumbnail brand.illustration 300 400 %}' class='img-thumbnail' alt='illustration {{ brand.title }}' />
                 </div>
             {% endif %}
 
-            {% if not company.illustration %}
+            {% if not brand.illustration %}
             <div class='col-md-10 col-md-offset-1'>
             {% else %}
             <div class='col-md-5'>
             {% endif %}
-                {% if company.topics.all|length %}
-                    <div><strong>Rubriques associées à la société: </strong></div>
+                {% if brand.topics.all|length %}
+                    <div><strong>Rubriques associées à la marque: </strong></div>
                     <div class='company_topics'>
-                        {% for topic in company.topics.all %}
+                        {% for topic in brand.topics.all %}
                             <div class='company_topic'>
                                 <i class='fa fa-plus'></i> {{ topic.title }}
                             </div>
                         {% endfor %}
                     </div>
                 {% endif %}
-                {% if company.brands.all|length %}
+                {% if brand.products.all|length %}
                     <div class='separator'></div>
                     <div class='company_brands'>
-                        <div><strong>Marques: </strong></div>
-                        {% for brand in company.brands.all %}
+                        <div><strong>Produits distribués par cette marque: </strong></div>
+                        {% for product in brand.product.all %}
                             <a href='{{ brand.get_absolute_url }}'>
-                                {{ brand.title }}
+                                {{ product.title }}
                             </a> |
                         {% endfor %}
-                        {# {% if company.brands.all|length > 6 %} #}
+                        {# {% if brand.brands.all|length > 6 %} #}
                             {# <i class='fa fa-ellipsis-h'></i> #}
                         {# {% endif %} #}
                     </div>
                 {% endif %}
                 <div class='separator'></div>
                 <strong>Informations: </strong>
-                {% if company.adress %}
-                    <div class='info'>Adresse: {{ company.adress }}</div>
+                {% if brand.adress %}
+                    <div class='info'>Adresse: {{ brand.adress }}</div>
                 {% endif %}
-                {% if company.city %}
-                    <div class='info'>Ville: {{ company.city }}</div>
+                {% if brand.city %}
+                    <div class='info'>Ville: {{ brand.city }}</div>
                 {% endif %}
-                {% if company.zipCode %}
-                    <div class='info'>Code postal: {{ company.zipCode }}</div>
+                {% if brand.zipCode %}
+                    <div class='info'>Code postal: {{ brand.zipCode }}</div>
                 {% endif %}
-                {% if company.bp %}
-                    <div class='info'>Boite postale: {{ company.bp }}</div>
+                {% if brand.bp %}
+                    <div class='info'>Boite postale: {{ brand.bp }}</div>
                 {% endif %}
-                {% if company.country %}
-                    <div class='info'>Pays: {{ company.country }}</div>
+                {% if brand.country %}
+                    <div class='info'>Pays: {{ brand.country }}</div>
                 {% endif %}
-                {% if company.email %}
-                    <div class='info'><i class='fa fa-envelope'></i> <a href='mailto:{{ company.email }}'>{{ company.email }}</a></div>
+                {% if brand.email %}
+                    <div class='info'><i class='fa fa-envelope'></i> <a href='mailto:{{ brand.email }}'>{{ brand.email }}</a></div>
                 {% endif %}
-                {% if company.tel %}
-                    <div class='info'><i class='fa fa-phone'></i> {{ company.tel }}</div>
+                {% if brand.tel %}
+                    <div class='info'><i class='fa fa-phone'></i> {{ brand.tel }}</div>
                 {% endif %}
-                {% if company.fax %}
-                    <div class='info'><i class='fa fa-fax'></i> {{ company.fax }}</div>
+                {% if brand.fax %}
+                    <div class='info'><i class='fa fa-fax'></i> {{ brand.fax }}</div>
                 {% endif %}
-                {% if company.website %}
+                {% if brand.website %}
                     <div class='info'>
-                        <i class='fa fa-world'></i> <a href='//{{ company.website }}' target='blank'>{{ company.website }}</a>
+                        <i class='fa fa-world'></i> <a href='//{{ brand.website }}' target='blank'>{{ brand.website }}</a>
                     </div>
                 {% endif %}
 

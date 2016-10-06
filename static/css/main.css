@@ -37,6 +37,9 @@ a{
 .blue, .fa:not(.fa-caret-right){
     color: #428bca;
 }
+.red{
+    color: rgb(174,17,28);
+}
 .fa-warning{
     color: rgb(174,17,28);
 }
@@ -162,6 +165,13 @@ a{
 .job_person{
     margin-top: 20px;
     font-size: 12px;
+}
+.job_separator{
+    width: 75%;
+    margin: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px dotted #428bca;
 }
 .brand_products{
     font-size: 12px;

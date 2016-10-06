@@ -151,7 +151,7 @@
                         <div role="tabpanel" class="tab-pane {% if forloop.counter == 1%}active{% endif %}" id="{{ key }}">
                         {% for result in values %}
                             <div class='col-lg-3 col-md-4 col-sm-6 col-xs-6'>
-                            <div class='resultBox'>
+                                <div class='resultBox'>
                                     {% if key == "Person" %}
                                         <h3 class='text-center'><a href='{{ result.get_absolute_url }}'>{{ result.title }} {{ result.firstName }}</a></h3>
                                         <div class='person_companies'>
@@ -276,13 +276,19 @@
                                             </div>
                                         {% endif %}
                                     {% elif key == "Job" %}
-                                        <div class='job_person'>
-                                            {{ result.person.title }}
-                                            {{ result.person.firstName }}
+                                        <div class='job'>
+                                            <div class='job_person'>
+                                                <a href='{{ result.person.get_absolute_url }}'>
+                                                    {{ result.person.title }}
+                                                    {{ result.person.firstName }}
+                                                </a>
+                                            </div>
+                                            <h3 class='text-center'>
+                                                <span class='red'>{{ result.title }}</span>
+                                                <div class='job_separator'></div>
+                                                <i class='fa fa-at'></i> <a href='{{ result.company.get_absolute_url }}'>{{ result.company.title }}</a>
+                                            </h3>
                                         </div>
-                                        <h3 class='text-center'>
-                                            {{ result.title }} <i class='fa fa-at'></i> <b>{{ result.company.title }}</b>
-                                        </h3>
                                     {% endif %}
                                 </div>
                             </div>

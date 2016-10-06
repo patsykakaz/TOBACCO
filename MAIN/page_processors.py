@@ -19,3 +19,11 @@ def processor_revue(request, page):
     subsidiaries = Subsidiary.objects.filter(top_company=company)
     jobs = Job.objects.filter(company=company)
     return locals()
+
+@processor_for(Brand)
+def processor_revue(request, page):
+    brand = Brand.objects.get(pk=page.pk)
+    twin_brands = Brand.objects.filter(title=brand.title)
+    twin_brands = twin_brands.exlude(pk=brand.pk)
+    distributors = Company.objects.filter(brands__contains=brand)
+    return locals()

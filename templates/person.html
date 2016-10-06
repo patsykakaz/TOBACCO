@@ -31,8 +31,16 @@
                     {% for job in person.jobs %}
                         <div class='person_job'>
                             <b>{{ job.title }}</b>
-                            <br />
-                            @ {{ job.company.title }}
+                            <br /> @
+                            <a href='{{ brand.get_absolute_url }}'>
+                                <span role="button" data-html="true" data-toggle="popover" data-trigger="hover" title="Informations" data-content="
+                                    {% if job.company.adress %}
+                                        adresse: 
+                                    {% endif %}
+                                ">
+                                    {{ job.company.title }}
+                                </span>
+                            </a> |{{ job.company.title }}
                             {% if job.since %}
                                 depuis: {{ job.since }}
                             {% endif %}

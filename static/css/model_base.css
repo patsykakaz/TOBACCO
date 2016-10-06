@@ -4,6 +4,9 @@ strong{
 h1{
     font-weight: bold;
 }
+h3{
+    font-weight: lighter;
+}
 .company_sub{
     display: inline-block;
     margin: 5px 10px 5px 0;

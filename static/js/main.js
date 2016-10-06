@@ -1,6 +1,8 @@
 
 $(document).ready(function(){
 
+    $('[data-toggle="popover"]').popover();
+
     $('#main_search_container').outerWidth(
             $('#form_container').width()
             - ($('.form-group.col-md-6').width() - $('#topic').width())
@@ -36,7 +38,6 @@ $(document).ready(function(){
         target.fadeIn();
     });
 
-    ResultBox();
     $('#deploy_secondary').click(function(){
         $('#secondary_search_container').addClass('deploy');
         $(this).addClass('hide');
@@ -44,9 +45,9 @@ $(document).ready(function(){
 
     $('#main_search_input').focus();
 
-    // if($('body').height()<=$(window).height()){
-    //     $('footer').css('margin-top',$(window).height()-$('body').height());
-    // }
+    $(window).load(function(){
+        ResultBox();
+    });
 });
 
 $(window).resize(function(){
@@ -60,5 +61,10 @@ $(window).resize(function(){
 
 function ResultBox(){
     $('.resultBox').height($('.resultBox').outerWidth());
+    $('.job').each(function(){
+        if($(this).height()<$(this).parent('.resultBox').height()){
+            $(this).css('margin-top',($(this).parent('.resultBox').height()-$(this).height())/2);
+        }
+    });
 }
 
