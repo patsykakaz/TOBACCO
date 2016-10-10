@@ -2,9 +2,10 @@
 {% load pages_tags mezzanine_tags i18n staticfiles %}
 
 {% block main %}
+    <div style='background-color: yellow;'>{{ company|Company_tag }}</div>
     <div id='main' class='container'>
         <div class='row'>
-            <h3 class='text-center' style='margin-bottom:0; color:grey'>Société</h3>
+            <h2 class='text-center' style='margin-bottom:0; color:grey'>Société</h2>
             <h1 class='text-center' style='margin:10px 0 100px 0;'>{{ company.title }}</h1>
             {% if company.illustration %}
                 <div class='col-md-5 col-md-offset-1 illustration text-center'>
@@ -19,8 +20,8 @@
             <div class='col-md-5'>
             {% endif %}
                 {% if company.topics.all|length %}
-                    <div><strong>Rubriques associées à la société: </strong></div>
-                    <div class='company_topics'>
+                    <div><strong>Rubriques associées à la société:</strong> </div>
+                    <div class=''>
                         {% for topic in company.topics.all %}
                             <div class='company_topic'>
                                 <i class='fa fa-plus'></i> {{ topic.title }}
@@ -30,12 +31,19 @@
                 {% endif %}
                 {% if company.brands.all|length %}
                     <div class='separator'></div>
-                    <div class='company_brands'>
-                        <div><strong>Marques: </strong></div>
+                    <div><strong>Marques: </strong></div>
+                    <div>
                         {% for brand in company.brands.all %}
                             <a href='{{ brand.get_absolute_url }}'>
                                 {{ brand.title }}
-                            </a> |
+                            </a>
+                            {% if brand.products %}
+                                <span class='text-muted'>[{% for product in brand.products.all %}
+                                    {{ product.title }}
+                                    {% if not forloop.last %}, {% endif %}
+                                {% endfor %}]</span>
+                            {% endif %}
+                            {% if not forloop.last %}| {% endif %}
                         {% endfor %}
                         {# {% if company.brands.all|length > 6 %} #}
                             {# <i class='fa fa-ellipsis-h'></i> #}
@@ -43,7 +51,7 @@
                     </div>
                 {% endif %}
                 <div class='separator'></div>
-                <strong>Informations: </strong>
+                <div><strong>Informations: </strong></div>
                 {% if company.adress %}
                     <div class='info'>Adresse: {{ company.adress }}</div>
                 {% endif %}
@@ -76,7 +84,7 @@
 
                 {% if subsidiaries|length %}
                     <div class='separator'></div>
-                    <div class='company_brands'>
+                    <div>
                         <div><strong>Filliales: </strong></div>
                         {% for sub in subsidiaries %}
                             <div class='company_sub'>
@@ -90,7 +98,7 @@
 
                 {% if jobs %}
                     <div class='separator'></div>
-                    <div class='company_jobs'>
+                    <div>
                         <div><strong>Employés: </strong></div>
                         {% for job in jobs %}
                             <div class='company_job'>
