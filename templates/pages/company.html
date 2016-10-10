@@ -1,0 +1,114 @@
+{% extends "model_base.html" %}
+{% load pages_tags mezzanine_tags i18n staticfiles %}
+
+{% block main %}
+    <div id='main' class='container'>
+        <div class='row'>
+            <h2 class='text-center' style='margin-bottom:0; color:grey'>Société</h2>
+            <h1 class='text-center' style='margin:10px 0 100px 0;'>{{ company.title }}</h1>
+            {% if company.illustration %}
+                <div class='col-md-5 col-md-offset-1 illustration text-center'>
+                <div class='illustration'>
+                    <img src='{{ MEDIA_URL }}{% thumbnail company.illustration 300 400 %}' class='img-thumbnail' alt='illustration {{ company.title }}' />
+                </div>
+            {% endif %}
+
+            {% if not company.illustration %}
+            <div class='col-md-10 col-md-offset-1'>
+            {% else %}
+            <div class='col-md-5'>
+            {% endif %}
+                {% if company.topics.all|length %}
+                    <div><strong>Rubriques associées à la société:</strong> </div>
+                    <div class=''>
+                        {% for topic in company.topics.all %}
+                            <div class='company_topic'>
+                                <i class='fa fa-plus'></i> {{ topic.title }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if company.brands.all|length %}
+                    <div class='separator'></div>
+                    <div><strong>Marques: </strong></div>
+                    <div>
+                        {% for brand in company.brands.all %}
+                            <a href='{{ brand.get_absolute_url }}'>
+                                {{ brand.title }}
+                            </a>
+                            {% if brand.products %}
+                                <span class='text-muted'>[{% for product in brand.products.all %}
+                                    {{ product.title }}
+                                    {% if not forloop.last %}, {% endif %}
+                                {% endfor %}]</span>
+                            {% endif %}
+                            {% if not forloop.last %}| {% endif %}
+                        {% endfor %}
+                        {# {% if company.brands.all|length > 6 %} #}
+                            {# <i class='fa fa-ellipsis-h'></i> #}
+                        {# {% endif %} #}
+                    </div>
+                {% endif %}
+                <div class='separator'></div>
+                <div><strong>Informations: </strong></div>
+                {% if company.adress %}
+                    <div class='info'>Adresse: {{ company.adress }}</div>
+                {% endif %}
+                {% if company.city %}
+                    <div class='info'>Ville: {{ company.city }}</div>
+                {% endif %}
+                {% if company.zipCode %}
+                    <div class='info'>Code postal: {{ company.zipCode }}</div>
+                {% endif %}
+                {% if company.bp %}
+                    <div class='info'>Boite postale: {{ company.bp }}</div>
+                {% endif %}
+                {% if company.country %}
+                    <div class='info'>Pays: {{ company.country }}</div>
+                {% endif %}
+                {% if company.email %}
+                    <div class='info'><i class='fa fa-envelope'></i> <a href='mailto:{{ company.email }}'>{{ company.email }}</a></div>
+                {% endif %}
+                {% if company.tel %}
+                    <div class='info'><i class='fa fa-phone'></i> {{ company.tel }}</div>
+                {% endif %}
+                {% if company.fax %}
+                    <div class='info'><i class='fa fa-fax'></i> {{ company.fax }}</div>
+                {% endif %}
+                {% if company.website %}
+                    <div class='info'>
+                        <i class='fa fa-world'></i> <a href='//{{ company.website }}' target='blank'>{{ company.website }}</a>
+                    </div>
+                {% endif %}
+
+                {% if subsidiaries|length %}
+                    <div class='separator'></div>
+                    <div>
+                        <div><strong>Filliales: </strong></div>
+                        {% for sub in subsidiaries %}
+                            <div class='company_sub'>
+                                <a href='{{ sub.sub_company.get_absolute_url }}'>{{ sub.sub_company.title }}</a>
+                                {# [ {{ sub.relaton }} ] #}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+
+                {% if jobs %}
+                    <div class='separator'></div>
+                    <div>
+                        <div><strong>Employés: </strong></div>
+                        {% for job in jobs %}
+                            <div class='company_job'>
+                                 {{ job.title }} <i class='fa fa-chevron-right' style='margin: 0 5px;'></i> <a href='{{ job.person.get_absolute_url }}'>{{ job.person }}</a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

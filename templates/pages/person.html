@@ -1,0 +1,79 @@
+{% extends "model_base.html" %}
+{% load pages_tags mezzanine_tags i18n staticfiles %}
+
+{% block sub_extra_css %}
+<style type="text/css">
+    .illustration{
+        margin-top: 15px;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+    <div id='main' class='container'>
+        <div class='row'>
+            <h3 class='text-center' style='margin-bottom:0; color:grey'>Personne</h3>
+            <h1 class='text-center' style='margin:10px 0 50px 0;'>{{ person.firstName }} {{ person.title }}</h1>
+            {% if person.illustration %}
+                <div class='col-md-5 col-md-offset-1 illustration text-center'>
+                    <img src='{{ MEDIA_URL }}{% thumbnail person.illustration 300 400 %}' class='img-thumbnail' alt='illustration {{ person.title }}' />
+                </div>
+            {% endif %}
+            {% if not person.illustration %}
+            <div class='col-md-10 col-md-offset-1'>
+            {% else %}
+            <div class='col-md-5'>
+            {% endif %}
+
+                <div class='separator'></div>
+                {% if person.jobs|length %}
+                    <strong class='text-center'><h4>Postes occupés</h4></strong>
+                    {% for job in person.jobs %}
+                        <div class='person_job'>
+                            <b>{{ job.title }}</b>
+                            <br /> @
+                            <a href='{{ brand.get_absolute_url }}'>
+                                <span role="button" data-html="true" data-toggle="popover" data-trigger="hover" title="Informations" data-content="
+                                    {% if job.company.adress %}
+                                        adresse: 
+                                    {% endif %}
+                                ">
+                                    {{ job.company.title }}
+                                </span>
+                            </a> |{{ job.company.title }}
+                            {% if job.since %}
+                                depuis: {{ job.since }}
+                            {% endif %}
+                            + show company basic info [pop-over]
+                        </div>
+                    {% endfor %}
+                    <div class='separator'></div>
+                {% endif %} 
+
+                {% if person.adress or person.city or person.zipCode or person.country or person.email or person.tel %}
+                    <strong class='text-center'><h4>Informations</h4></strong>
+                    {% if person.adress %}
+                        <div class='info'>Adresse: {{ person.adress }}</div>
+                    {% endif %}
+                    {% if person.city %}
+                        <div class='info'>Ville: {{ person.city }}</div>
+                    {% endif %}
+                    {% if person.zipCode %}
+                        <div class='info'>Code postal: {{ person.zipCode }}</div>
+                    {% endif %}
+                    {% if person.country %}
+                        <div class='info'>Pays: {{ person.country }}</div>
+                    {% endif %}
+                    {% if person.email %}
+                        <div class='info'><i class='fa fa-envelope'></i> <a href='mailto:{{ person.email }}'>{{ person.email }}</a></div>
+                    {% endif %}
+                    {% if person.tel %}
+                        <div class='info'><i class='fa fa-phone'></i> {{ person.tel }}</div>
+                    {% endif %}
+                    <div class='separator'></div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,0 +1,62 @@
+
+body{
+    color: rgb(50,50,60);
+    /*background-color: rgb(230,230,230);*/
+}
+b{
+    color:red;
+}
+.info b{
+    color: rgb(50,50,60);
+}
+
+.societe{
+    margin: 0 20px 40px 20px;
+    padding: 0 10px 40px 10px;
+    border: 1px solid grey;
+    /*border-bottom: 1px solid grey;*/
+    background-color: white;
+}
+.societe h1{
+    margin-top: 10px;
+    text-align: center;
+}
+.membres{
+}
+.membre{
+    margin-top: 10px;
+    padding: 4px 8px;
+    background-color: white;
+}
+.membre h4{
+    margin: 4px 0 8px 0;
+}
+.membre .info{
+    /*text-align: right;*/
+}
+.membre .info b{
+    color: rgb(60,60,90);
+}
+
+.marques{
+    margin-top: 15px;
+    margin-bottom: 15px;
+    color: rgb(0,0,0);
+}
+.marque{
+    /*display: inline-block;*/
+}
+
+.allFilliales{
+    margin-top: 0;
+    padding: 4px 0;
+    /*color: white;*/
+}
+.allFilliales h2{
+    margin: 5px 0;
+}
+.filliale{
+    margin: 0 0 20px;
+    padding: 4px 8px;
+    border: 2px dashed rgb(50,50,60);
+}

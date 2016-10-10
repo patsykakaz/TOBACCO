@@ -244,7 +244,7 @@
                                             </div>
                                         {% endif %}
                                     {% elif key == "Brand" %}
-                                        <h3 class='text-center'>{{ result.title }}</h3>
+                                        <h3 class='text-center'><a href='{{ result.get_absolute_url }}'>{{ result.title }}</a></h3>
                                         {% if result.illustration %}
                                             <div class='illustration'>
                                                 <img src='{{ MEDIA_URL }}{% thumbnail result.illustration 90 90 %}' class='img-thumbnail' alt='illustration {{ result.title }}' />
@@ -312,6 +312,7 @@
 
 </div>
 {% endblock %}
+
 
 
 

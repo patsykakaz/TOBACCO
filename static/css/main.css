@@ -26,6 +26,7 @@ strong{
     letter-spacing: 1px;
     color: rgb(174,17,28);
 }
+
 a{  
     font-family: 'Comfortaa', cursive;
 }
@@ -39,6 +40,13 @@ a{
 }
 .red{
     color: rgb(174,17,28);
+}
+.Fsmall{
+    font-size: 12px;
+}.Fmid{
+    font-size: 14px;
+}.Flarge{
+    font-size: 16px;
 }
 .fa-warning{
     color: rgb(174,17,28);
@@ -139,11 +147,15 @@ a{
 }.resultBox h3{
     display: inline-block;
     margin: 0;
-    font-size: 15px;
+    font-size: 16px;
     color: #428bca;
 }
 .resultBox .illustration{
     margin: 10px 0 5px 0;
+}
+.resultBox .info{
+    margin-left: 20px;
+    text-align: left;
 }
 
 .person_companies{
@@ -176,6 +188,10 @@ a{
 .brand_products{
     font-size: 12px;
 }
+.brand_twin_brand{
+    display: inline-block;
+    font-size: 14px;
+}
 
 
 @media screen and (min-width: 991px){
@@ -183,6 +199,7 @@ a{
         min-height: 350px;
     }
 }
+
 
 
 

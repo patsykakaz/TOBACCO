@@ -24,6 +24,7 @@ def processor_revue(request, page):
 def processor_revue(request, page):
     brand = Brand.objects.get(pk=page.pk)
     twin_brands = Brand.objects.filter(title=brand.title)
-    twin_brands = twin_brands.exlude(pk=brand.pk)
-    distributors = Company.objects.filter(brands__contains=brand)
+    twin_brands = twin_brands.exclude(pk=brand.pk)
+    distributors = Company.objects.filter(brands__in=[brand])
     return locals()
+

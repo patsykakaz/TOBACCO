@@ -2,9 +2,6 @@
 {% load pages_tags mezzanine_tags i18n staticfiles %}
 
 {% block main %}
-    {% for x in twin_brands %}
-        {{ x.title }}
-    {% endfor %}
     <div id='main' class='container'>
         <div class='row'>
             <h3 class='text-center' style='margin-bottom:0; color:grey'>Marque</h3>
@@ -33,12 +30,13 @@
                 {% endif %}
                 {% if brand.products.all|length %}
                     <div class='separator'></div>
-                    <div class='company_brands'>
+                    <div>
                         <div><strong>Produits distribués par cette marque: </strong></div>
-                        {% for product in brand.product.all %}
-                            <a href='{{ brand.get_absolute_url }}'>
+                        {% for product in brand.products.all %}
+                            <a href='{{ product.get_absolute_url }}'>
                                 {{ product.title }}
-                            </a> |
+                            </a>
+                            {% if not forloop.last %}| {% endif %}
                         {% endfor %}
                         {# {% if brand.brands.all|length > 6 %} #}
                             {# <i class='fa fa-ellipsis-h'></i> #}
@@ -46,35 +44,16 @@
                     </div>
                 {% endif %}
                 <div class='separator'></div>
-                <strong>Informations: </strong>
-                {% if brand.adress %}
-                    <div class='info'>Adresse: {{ brand.adress }}</div>
-                {% endif %}
-                {% if brand.city %}
-                    <div class='info'>Ville: {{ brand.city }}</div>
-                {% endif %}
-                {% if brand.zipCode %}
-                    <div class='info'>Code postal: {{ brand.zipCode }}</div>
-                {% endif %}
-                {% if brand.bp %}
-                    <div class='info'>Boite postale: {{ brand.bp }}</div>
-                {% endif %}
-                {% if brand.country %}
-                    <div class='info'>Pays: {{ brand.country }}</div>
-                {% endif %}
-                {% if brand.email %}
-                    <div class='info'><i class='fa fa-envelope'></i> <a href='mailto:{{ brand.email }}'>{{ brand.email }}</a></div>
-                {% endif %}
-                {% if brand.tel %}
-                    <div class='info'><i class='fa fa-phone'></i> {{ brand.tel }}</div>
-                {% endif %}
-                {% if brand.fax %}
-                    <div class='info'><i class='fa fa-fax'></i> {{ brand.fax }}</div>
-                {% endif %}
-                {% if brand.website %}
-                    <div class='info'>
-                        <i class='fa fa-world'></i> <a href='//{{ brand.website }}' target='blank'>{{ brand.website }}</a>
-                    </div>
+                {% if distributors %}
+                    <div><strong>Distributeurs: </strong></div>
+                    {% for distrib in distributors %}
+                        <a href='{{ distrib.get_absolute_url }}'>
+                            {{ distrib.title }}
+                        </a>
+                        {% if not forloop.last %}| {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <strong>Aucun distributeur connu pour cette marque</strong>
                 {% endif %}
 
                 {% if subsidiaries|length %}
@@ -90,20 +69,27 @@
                     </div>
                 {% endif %}
 
-
-                {% if jobs %}
+                {% if twin_brands %}
                     <div class='separator'></div>
-                    <div class='company_jobs'>
-                        <div><strong>Employés: </strong></div>
-                        {% for job in jobs %}
-                            <div class='company_job'>
-                                 {{ job.title }} <i class='fa fa-chevron-right' style='margin: 0 5px;'></i> <a href='{{ job.person.get_absolute_url }}'>{{ job.person }}</a>
-                            </div>
-                        {% endfor %}
-                    </div>
+                    <div><strong>Marques homonymes: </strong></div>
+                    {% for twin in twin_brands %}
+                        <div class='brand_twin_brand'>
+                            <a href='{{ twin.get_absolute_url }}'>
+                                {{ twin.title }}
+                            </a>
+                            {% if twin.products %}
+                                <span class='text-muted'>[{% for product in twin.products.all %}
+                                    {{ product.title }}
+                                    {% if not forloop.last %}, {% endif %}
+                                {% endfor %}]</span>
+                            {% endif %}
+                            {% if not forloop.last %}| {% endif %}
+                        </div>
+                    {% endfor %}
                 {% endif %}
 
             </div>
         </div>
     </div>
 {% endblock %}
+
