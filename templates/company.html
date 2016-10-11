@@ -2,10 +2,9 @@
 {% load pages_tags mezzanine_tags i18n staticfiles %}
 
 {% block main %}
-    <div style='background-color: yellow;'>{{ company|Company_tag }}</div>
     <div id='main' class='container'>
         <div class='row'>
-            <h2 class='text-center' style='margin-bottom:0; color:grey'>Société</h2>
+            <h2 class='text-center' style='margin-bottom:0; color:rgb(120,120,140);'>Société</h2>
             <h1 class='text-center' style='margin:10px 0 100px 0;'>{{ company.title }}</h1>
             {% if company.illustration %}
                 <div class='col-md-5 col-md-offset-1 illustration text-center'>
