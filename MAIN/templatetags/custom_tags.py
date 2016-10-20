@@ -7,7 +7,7 @@ register = template.Library()
 
 @register.filter(name='ExtendCompany')
 def ExtendCompany(company, *args):
-    html = "<h3 class='text-center'>"+company.title+"</h3>"
+    html = "<h4 class='text-center' style='color:rgb(174,17,28);'>"+company.title+"</h4>"
     if company.adress: 
         html += " <div><b>Adresse: </b>"+company.adress+"</div>"
     if company.city: 
@@ -32,7 +32,7 @@ def ExtendCompany(company, *args):
 def ExtendFilliale(sub, *args):
     company = sub.sub_company
     link = sub.relation
-    html = "<h3 class='text-center'>"+company.title+"</h3><h5 class='text-center' style='color:rgb(120,120,140);'>"+link+"</h5>"
+    html = "<h4 class='text-center' style='color:rgb(174,17,28);'>"+company.title+"</h4><h5 class='text-center' style='color:rgb(120,120,140);'>"+link+"</h5>"
     if company.adress: 
         html += " <div><b>Adresse: </b>"+company.adress+"</div>"
     if company.city: 
@@ -55,32 +55,22 @@ def ExtendFilliale(sub, *args):
 
 @register.filter(name='ExtendPerson')
 def ExtendPerson(person, *args):
-    toggle = False
     html = ""
     if type(person) == Person:
-        html += ("<h3 class='text-center'>"+person.firstName + " " + person.title+"</h3>")
+        html += ("<h4 class='text-center' style='color:rgb(174,17,28);'>"+person.firstName + " " + person.title+"</h4>")
     if person.adress:
-        toggle = True
         html += " <div><b>Adresse: </b>"+person.adress+"</div>"
     if person.city:
-        toggle = True
         html += " <div><b>Ville: </b>"+person.city+"</div>"
     if person.zipCode:
-        toggle = True
         html += " <div><b>Code postal: </b>"+person.zipCode+"</div>"
     if person.country:
-        toggle = True
         html += " <div><b>Pays: </b>"+person.country+"</div>"
     if person.email:
-        toggle = True
         html += " <div><b>Email: </b>"+person.email+"</div>"
     if person.tel:
-        toggle = True
         html += "<div><b>Téléphone: </b>"+person.tel+"</div>"
-    if toggle:
-        return html
-    else:
-        return False
+    return html
 
 @register.filter(name='ExtendBrand')
 def ExtendBrand(brand, *args):

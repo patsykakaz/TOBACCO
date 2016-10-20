@@ -37,9 +37,9 @@ urlpatterns += [
     # one homepage pattern, so if you use a different one, comment this
     # one out.
     url(r'^user/', include('USERMGMT.urls')),
+    url("^$", 'MAIN.views.research', name="home"),
     url(r'^research$', 'MAIN.views.research', name='research'),
     # url(r'^import/(?P<start>.+)/(?P<end>.+)/$', 'MAIN.views.importXML', name='import'),
-    url("^$", direct_to_template, {"template": "index.html"}, name="home"),
     url(r'^print$', 'MAIN.views.displayCompanies', name='print'),
 
     # HOMEPAGE AS AN EDITABLE PAGE IN THE PAGE TREE
