@@ -34,7 +34,7 @@
                     <div>
                         {% for brand in company.brands.all %}
                             <a href='{{ brand.get_absolute_url }}'>
-                                {{ brand|extendBrand }} <br />
+                                {{ brand|ExtendBrand|safe }} <br />
                                 {{ brand.title }}
                             </a>
                             {% if brand.products %}

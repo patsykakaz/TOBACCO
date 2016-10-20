@@ -88,7 +88,7 @@ def ExtendBrand(brand, *args):
     products = brand.products.all()
     for product in products : 
         html += "<span class='text-muted'>"+product.title+"</span> |"
-    html = html[:len(html-1)]
+    # html = html[:len(html-1)]
     return html
 
 
