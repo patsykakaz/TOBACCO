@@ -1,5 +1,5 @@
 {% extends "model_base.html" %}
-{% load pages_tags mezzanine_tags i18n staticfiles %}
+{% load pages_tags mezzanine_tags i18n staticfiles custom_tags %}
 
 {% block sub_extra_css %}
 <style type="text/css">
@@ -12,17 +12,17 @@
 {% block main %}
     <div id='main' class='container'>
         <div class='row'>
-            <h3 class='text-center' style='margin-bottom:0; color:grey'>Personne</h3>
+            <h3 class='text-center' style='margin-bottom:0; color:rgb(120,120,140);'>Personne</h3>
             <h1 class='text-center' style='margin:10px 0 50px 0;'>{{ person.firstName }} {{ person.title }}</h1>
             {% if person.illustration %}
-                <div class='col-md-5 col-md-offset-1 illustration text-center'>
+                <div class='col-md-3 col-md-offset-1 illustration text-center'>
                     <img src='{{ MEDIA_URL }}{% thumbnail person.illustration 300 400 %}' class='img-thumbnail' alt='illustration {{ person.title }}' />
                 </div>
             {% endif %}
             {% if not person.illustration %}
             <div class='col-md-10 col-md-offset-1'>
             {% else %}
-            <div class='col-md-5'>
+            <div class='col-md-7'>
             {% endif %}
 
                 <div class='separator'></div>
@@ -32,19 +32,16 @@
                         <div class='person_job'>
                             <b>{{ job.title }}</b>
                             <br /> @
-                            <a href='{{ brand.get_absolute_url }}'>
+                            <a href='{{ job.company.get_absolute_url }}'>
                                 <span role="button" data-html="true" data-toggle="popover" data-trigger="hover" title="Informations" data-content="
-                                    {% if job.company.adress %}
-                                        adresse: 
-                                    {% endif %}
+                                    {{ job.company|ExtendCompany|safe }}
                                 ">
                                     {{ job.company.title }}
                                 </span>
-                            </a> |{{ job.company.title }}
+                            </a>
                             {% if job.since %}
                                 depuis: {{ job.since }}
                             {% endif %}
-                            + show company basic info [pop-over]
                         </div>
                     {% endfor %}
                     <div class='separator'></div>

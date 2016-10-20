@@ -1,5 +1,5 @@
 {% extends "model_base.html" %}
-{% load pages_tags mezzanine_tags i18n staticfiles %}
+{% load pages_tags mezzanine_tags i18n staticfiles custom_tags %}
 
 {% block main %}
     <div id='main' class='container'>
@@ -48,25 +48,16 @@
                     <div><strong>Distributeurs: </strong></div>
                     {% for distrib in distributors %}
                         <a href='{{ distrib.get_absolute_url }}'>
-                            {{ distrib.title }}
+                            <span role="button" data-html="true" data-toggle="popover" data-trigger="hover" title="Distributeur" data-content="
+                                    {{ distrib|ExtendCompany|safe }}
+                                ">
+                                {{ distrib.title }}
+                            </span>
                         </a>
                         {% if not forloop.last %}| {% endif %}
                     {% endfor %}
                 {% else %}
                     <strong>Aucun distributeur connu pour cette marque</strong>
-                {% endif %}
-
-                {% if subsidiaries|length %}
-                    <div class='separator'></div>
-                    <div class='company_brands'>
-                        <div><strong>Filliales: </strong></div>
-                        {% for sub in subsidiaries %}
-                            <div class='company_sub'>
-                                <a href='{{ sub.sub_company.get_absolute_url }}'>{{ sub.sub_company.title }}</a>
-                                {# [ {{ sub.relaton }} ] #}
-                            </div>
-                        {% endfor %}
-                    </div>
                 {% endif %}
 
                 {% if twin_brands %}
