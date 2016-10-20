@@ -1,0 +1,69 @@
+{% extends "login_base.html" %}
+{% load pages_tags mezzanine_tags i18n staticfiles %}
+{% load custom_tags %}
+{% load bootstrap3 %}
+
+{% block main %}
+    <div id='main'>
+        <div class='container'>
+
+            <div id='form' class='col-md-4 col-sm-4 col-md-offset-4 col-sm-offset-4 text-center' style='padding:30px; background-color:white; border-radius:5px;'>
+                {% if user.is_authenticated and not modification %}
+                    <h3 style='color:#FEC10D'>vous êtes déjà connecté</h3>
+                {% elif user.is_authenticated %}
+                    <h2 style='margin: 0 0 20px 0'>MODIFIEZ VOTRE PROFIL</h2>
+                    <form method='POST' action=''>
+                        {% csrf_token %}
+                        {% bootstrap_form form %}
+                        {% buttons %}
+                            <button type="submit" class="btn btn-primary" style='margin-top:10px;'>
+                                <i class='fa fa-paper-plane'></i> Envoyer
+                            </button>
+                        {% endbuttons %}
+                    </form>
+                {% else %}
+                    {% if not articleAttempt %}
+                        <h2 style='margin: 0 0 20px 0'>CONNECTEZ-VOUS</h2>
+                        <form method='POST' action=''>
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            {% buttons %}
+                                <button type="submit" class="btn btn-primary" style='margin-top:10px;'>
+                                    <i class='fa fa-paper-plane'></i> Envoyer
+                                </button>
+                            {% endbuttons %}
+                        </form>
+                    {% else %}
+                        <h3 style='margin: 0 0 10px 0'>Pour accéder à cette page, vous devez être abonné à la <span style='color:#FEC10D;'>lettre PNP</span></h3>
+                        <h4 class='text-muted' style='margin-bottom: 15px;'>Merci de vous identifier.</h4>
+                        <form method='POST' action=''>
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            {% buttons %}
+                                <button type="submit" class="btn btn-primary" style='margin-top:10px;'>
+                                    {% bootstrap_icon "star" %} Envoyer
+                                </button>
+                            {% endbuttons %}
+                        </form>
+                    {% endif %}
+                {% endif %}
+                <div class='text-left'>
+                   <a href='{% url 'forgottenPassword' %}' style='color:#007099;'>
+                        <i class='fa fa-arrow-right'></i> mot de passe oublié
+                    </a> <br />
+                    <a href='{% url 'ask_abo' %}' style='color:#007099;'>
+                        <i class='fa fa-arrow-right'></i> vous souhaitez vous abonner
+                    </a> <br />
+                    <a href='{% url 'ask_abo' %}' style='color:#007099;'>
+                        <i class='fa fa-arrow-right'></i> Vous êtes abonné à <span style='color:#FEC10D;'>la Lettre</span>, mais ne connaissez pas vos identifiants
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+

@@ -1,0 +1,54 @@
+{% extends "login_base.html" %}
+{% load mezzanine_tags keyword_tags i18n staticfiles %}
+{% load custom_tags %}
+{% load bootstrap3 %}
+
+{% block main %}
+        {% if not confirmation_mail %}
+            <div id='form' class='col-md-10 col-md-offset-1 text-center' style='margin-top: 30px; padding:30px; border-radius:5px;'>
+                <div class='thumbnail col-md-6' style='padding:30px; '>
+                    <h3 class='text-info bold' style='margin-bottom:10px;'>MODIFIEZ</h3>
+                    <h4 class='text-info bold' style='margin-bottom:25px; text-decoration:underline;'>VOTRE ADRESSE MAIL</h4>
+                    <form method='POST' action=''>
+                        {% csrf_token %}
+                        {% bootstrap_form form1 %}
+                        <input type='hidden' id='modification_mail' name='modification_mail' />
+                        {% buttons %}
+                            <button type="submit" class="btn btn-success" style='margin-top:10px;'>
+                                Modifier
+                            </button>
+                        {% endbuttons %}
+                    </form>
+                </div>
+                <div class='thumbnail col-md-5 col-md-offset-1' style='padding:30px;'>
+                    <h3 class='text-info bold' style='margin-bottom:10px;'>MODIFIEZ</h3>
+                    <h4 class='text-info bold' style='margin-bottom:25px; text-decoration:underline;'>VOTRE MOT DE PASSE</h4>
+                    <form method='POST' action=''>
+                        {% csrf_token %}
+                        {% bootstrap_form form2 %}
+                        <input type='hidden' id='modification_password' name='modification_password' />
+                        {% buttons %}
+                            <button type="submit" class="btn btn-success" style='margin-top:10px;'>
+                                Modifier
+                            </button>
+                        {% endbuttons %}
+                    </form>  
+                </div>
+            </div>
+        {% else %}
+            <div id='form' class='col-md-6 col-md-offset-3 text-center' style='margin-top: 30px; padding:30px; background-color:white; border-radius:5px;'>
+                <h2 style='margin: 0 0 20px 0'>Confirmation adresse mail :</h2>
+                <div class='thumbnail col-md-12' style='padding:30px; '>
+                    <form method='POST' action=''>
+                        {% csrf_token %}
+                        {% bootstrap_form form3 %}
+                        {% buttons %}
+                            <button type="submit" class="btn btn-success" style='margin-top:10px;'>
+                                Confirmer
+                            </button>
+                        {% endbuttons %}
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+{% endblock %}

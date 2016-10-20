@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="{{ LANGUAGE_CODE }}"{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
+{% load pages_tags mezzanine_tags i18n staticfiles %}
+{% load custom_tags %}
+{% load bootstrap3 %}
+
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+<meta name="description" content="{% block meta_description %}{% endblock %}">
+<title>{% block meta_title %}{% endblock %}{% if settings.sITE_TITLE %} | {{ settings.sITE_TITLE }}{% endif %}</title>
+<link rel="shortcut icon" href="{% static "img/favicon.ico" %}">
+
+{% ifinstalled mezzanine.blog %}
+<link rel="alternate" type="application/rss+xml" title="RSS" href="{% url "blog_post_feed" "rss" %}">
+<link rel="alternate" type="application/atom+xml" title="Atom" href="{% url "blog_post_feed" "atom" %}">
+{% endifinstalled %}
+
+{% compress css %}
+<link rel="stylesheet" href="{% static "css/bootstrap.css" %}">
+<link rel="stylesheet" href="{% static "css/bootstrap.override.css" %}">
+<link rel="stylesheet" href="{% static "css/custom.css" %}">
+<link rel="stylesheet" href="{% static "css/navbar.css" %}">
+<link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,300,700,800' rel='stylesheet' type='text/css'>
+{% if LANGUAGE_BIDI %}
+<link rel="stylesheet" href="{% static "css/bootstrap-rtl.css" %}">
+{% endif %}
+{% block extra_css %}
+<style type="text/css">
+    #contentNav{
+        border-bottom: 1px solid rgb(240,240,240);
+    }
+</style>
+{% endblock %}
+{% endcompress %}
+
+{% compress js %}
+<script src="{% static "mezzanine/js/"|add:settings.JQUERY_FILENAME %}"></script>
+<script src="{% static "js/bootstrap.js" %}"></script>
+<script src="{% static "js/bootstrap-extras.js" %}"></script>
+<script src="{% static "js/main.js" %}"></script>
+{% block extra_js %}
+    <script type="text/javascript">
+    
+        $(document).ready(function(){
+            $('#main').css('min-height', $(window).height()-$('#contentNav').outerHeight());
+        });
+        $(window).resize(function(){
+            $('#main').css('min-height', $(window).height()-$('#contentNav').outerHeight());
+        });
+    </script>
+{% endblock %}
+{% endcompress %}
+
+<!--[if lt IE 9]>
+<script src="{% static "js/html5shiv.js" %}"></script>
+<script src="{% static "js/respond.min.js" %}"></script>
+<![endif]-->
+
+{% block extra_head %}{% endblock %}
+{% block edited_css %}
+<style type="text/css">
+    #main{
+        vertical-align: top;
+        background: url('{% static 'img/login_bg.jpg' %}') no-repeat center center fixed; 
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
+    #contentNav{
+        border-bottom: 1px solid rgb(240,240,240);
+    }
+    #form{
+        margin-top: 50px;
+    }
+</style>
+ {% block extra_edited_css %}{% endblock %}
+{% endblock %}
+</head>
+<body id="{% block body_id %}body{% endblock %}">
+{% if habillage %}
+<div id='banner_layer' style='height: 200px'>
+    <a href='{{ habillage.lien }}' target='blank'><img src='{{ MEDIA_URL }}publicite/{{ habillage.media }}' /></a>
+</div>
+{% endif %}
+{% block contentNav %}
+<nav id='contentNav' class="navbar navbar-default" role="navigation">
+<div class="container">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="//pnpapetier.com"><img src='{% static "img/logo_pnpapetier.jpg" %}' alt='logo PNP' /></a>
+    </div>
+    <div id='navbar-collapse-1' class="collapse navbar-collapse">
+        <ul class='nav navbar-nav navbar-left'>
+            <li class='text-center'>
+                <a href="/" style='padding-top:28px; color:#007099;'>
+                    <i class='fa fa-arrow-left'></i> RETOUR ACCUEIL
+                </a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a href class="dropdown-toggle text-center" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    {% if not user.is_authenticated %}
+                        <i class='fa fa-2x fa-user'></i>
+                        <span class='mobileTitle'>CONNEXION</span>
+                    {% else %}
+                        <i class='fa fa-2x fa-user' style='color:#FEC10D'></i>
+                        <span class='mobileTitle'>PROFIL</span>
+                    {% endif %}
+                </a>
+                <ul class="dropdown-menu text-center">
+                    {% if not user.is_authenticated %}
+                    <li class="{% if page_univ.is_current_or_ascendant %}active{% endif %}">
+                        <a href="/user/login/">
+                            connexion
+                        </a>
+                    </li>
+                     {% else %}
+                    <li class="{% if page_univ.is_current_or_ascendant %}active{% endif %}">
+                        <a href="/user/modification/">
+                            modifier profil
+                        </a>
+                    </li>
+                    <li class="{% if page_univ.is_current_or_ascendant %}active{% endif %}">
+                        <a href="/user/logout/">
+                            déconnexion
+                        </a>
+                     </li>
+                     {% endif %}
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+<div id='main'>
+    <div class='container'>
+    {% if request.user.is_authenticated  %}  
+    <div class='col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-6 col-sm-6 col-sm-offset-6 col-xs-10 col-xs-offset-1 text-center' style=' margin-top: 30px; padding:10px 30px; border-radius:5px; background-color:white; font-size:16px;'>
+        Bienvenue sur votre espace utilisateur,  
+        <b style='color:#FEC10D'>
+            <i class='fa fa-user' style='color:white;'></i>
+            {{ request.user.email|truncatechars:30 }}
+        </b>
+    </div>
+    {% endif %}
+    {% nevercache %}
+    {% block message %}
+        {% if message %}
+            <div id='success' class='col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3' style='margin-top: 45px;'>
+                <div class='alert alert-success text-center' style='padding: 10px 15px 5px 15px;'>
+                    <h3 style='margin: 10px;'>{{ message }}</h3>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+    {% block error %}
+        {% if error %}
+            <div id='error' class='col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3'>
+                <div class='alert alert-danger text-center' style='padding: 10px 15px 5px 15px;'>
+                    <i class='icon-warning-sign'></i> Erreur parmi les données soumises.
+                    <h3 style='margin: 10px;'>{{ error }}</h3>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock %}
+    {% block obsolete%}
+        {% if obsolete %}
+        <div id='obsolete' class='col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3' style='margin-top: 45px;'>
+            <div class='alert alert-info text-center' style='padding: 10px 15px 5px 15px;'>
+                <h3 style='margin: 10px;'> Votre compte ne dispose plus d'un abonnement valide. </h3>
+                <p>
+                    Merci de contacter le service Abonnement.
+                </p>
+            </div>
+        </div>
+        {% endif %}
+    {% endblock %}
+    {% endnevercache %}
+    </div>
+{% block main %}
+{% endblock %}
+</div>
+
+<footer>
+    <div class="container">
+        {% page_menu "pages/menus/footer.html" %}
+        <div class='col-md-12 text-center' style='margin-top:30px; font-size:10px; color: rgb(170,170,170);'>
+            Un site du groupe mbc. tous droits réservés.
+        </div>
+    </div>
+</footer>
+
+{% include "includes/footer_scripts.html" %}
+
+</body>
+<script>
+
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-72366960-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
+</html>
+
+
+

@@ -1,0 +1,73 @@
+{% extends "login_base.html" %}
+{% load pages_tags mezzanine_tags i18n staticfiles %}
+{% load custom_tags %}
+{% load bootstrap3 %}
+
+{% block extra_css %}
+<style type="text/css">
+    h4{
+        font-size: 15px;
+        font-weight: bold;
+        color: #007099;
+    }
+    i.fa-arrow-right{
+        color: #FEC10D;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+    <div id='main' class='container text-center'>
+        <h2 class='text-center' style='display:inline-block; padding: 10px 20px; background-color:white; border-radius:4px; font-weight:bold; color:#FEC10D'>Abonnement</h2>
+        <div id='form' class='row' style='margin-bottom:40px;'>
+            <div class='col-md-6 col-sm-6 col-xs-10 col-md-offset-1 col-sm-offset-1 col-xs-offset-1'>
+                <div style='padding:20px 30px; background-color:white; border-radius:5px;'>
+                    <p class='text-left'>
+                        <i class='fa fa-arrow-right' style='color:#007099;'></i> Vous souhaitez vous abonner à <b style='color:#007099'>PNP</b> ou à <b style='color:#FEC10D'>la Lettre PNP</b> ? <br />
+                        <i class='fa fa-arrow-right' style='color:#007099;'></i> Vous êtes abonnés à la <b style='color:#FEC10D'>Lettre PNP</b> mais vous ne connaissez pas vos identifiants ? <br />
+                        Merci de remplir le formulaire suivant. Notre service abonnement vous répondra dans les meilleurs délais. 
+                    </p>
+                    <div style='margin-top:20px;'>
+                        <form method='POST' action=''>
+                            {% csrf_token %}
+                            {% bootstrap_form form %}
+                            {% buttons %}
+                                <button type="submit" class="btn btn-primary" style='margin-top:10px;'>
+                                    <i class='fa fa-paper-plane'></i> Envoyer
+                                </button>
+                            {% endbuttons %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class='col-md-4 col-sm-4 col-xs-10 col-md-offset-0 col-sm-offset-0 col-xs-offset-1'>
+                <div class='text-left' style='padding:20px 30px; background-color:white; border-radius:5px;'>
+                    <p style='margin-bottom:20px'>
+                        <h4>Offre Premium PNP & La Lettre PNP (1 an - 11 + 22 numéros)* :</h4>
+                            <i class='fa fa-arrow-right'></i> Magazine PNP + La Lettre version papier & web + email : 550€ TTC 
+                            <br />
+                    </p>
+                    <p style='margin-bottom:20px'>
+                        <h4 style='font-weight:bold; color'>PNP (1 an - 11 numéros)* :</h4>
+                        <i class='fa fa-arrow-right'></i> Magazine PNP + Tendances + PNS : 82€ TTC <br />
+                        <br />
+                    </p>
+                    <p style='margin-bottom:20px'>
+                        <h4 style='font-weight:bold; color'>La Lettre PNP (1 an - 22 numéros)* :</h4>
+                        <i class='fa fa-arrow-right'></i> Version papier uniquement : 396€ TTC  <br />
+                        <i class='fa fa-arrow-right'></i>  Version papier + web & archives + email : 494€ TTC 
+                        <br />
+                    </p>
+                    <br />
+                    <p>
+                        <i>* Tarifs France métropolitaine valable pour l'année 2016. Tarifs pour les autres pays disponibles sur demande.</i>
+                    </p>
+                    <br />
+                    <p class='text-left'>
+                        Pour toute demande d’informations, vous pouvez nous contacter à <a href='mailto:abonnement@groupembc.com' style='font-weight:bold; color:#007099;'>abonnement@groupembc.com</a> <br />ou au <a href="tel:0490146141" style='font-weight:bold; color:#007099;'>0490146141</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
