@@ -34,8 +34,11 @@
                     <div>
                         {% for brand in company.brands.all %}
                             <a href='{{ brand.get_absolute_url }}'>
-                                {{ brand|ExtendBrand|safe }} <br />
-                                {{ brand.title }}
+                                <span role="button" data-html="true" data-toggle="popover" data-trigger="hover" title="Filliale" data-content="
+                                            {{ brand|ExtendBrand|safe }}
+                                        ">
+                                    {{ brand.title }}
+                                </span>
                             </a>
                             {% if brand.products %}
                                 <span class='text-muted'>[{% for product in brand.products.all %}
