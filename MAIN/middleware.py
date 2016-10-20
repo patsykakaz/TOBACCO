@@ -14,7 +14,7 @@ from models import *
 class AuthXMiddleware(object):
     def process_request(self,request):
         # forbidden_domain = "lalettre"
-        if not request.user.is_authenticated():
-            return HttpResponseRedirect('/user/login?next='+request.path)
+        if not request.user.is_authenticated() and not "admin/" in request.path and not "/user/" in request.path :
+            return HttpResponseRedirect('/user/login/?next='+request.path)
         else:
             print "request.user.is_authenticated = {}".format(request.user.is_authenticated())
