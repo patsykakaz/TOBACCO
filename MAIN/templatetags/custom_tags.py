@@ -74,7 +74,7 @@ def ExtendPerson(person, *args):
 
 @register.filter(name='ExtendBrand')
 def ExtendBrand(brand, *args):
-    html = ""
+    html = str(brand.title)
     products = brand.products.all()
     for product in products : 
         html += "<span class='text-muted'>"+product.title+"</span> |"
