@@ -9,3 +9,4 @@ local_settings.py
 /static/*
 !/static/css
 !/static/js
+webservices.py

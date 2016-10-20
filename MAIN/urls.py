@@ -36,13 +36,11 @@ urlpatterns += [
     # commented out like the others, so it's the default. You only need
     # one homepage pattern, so if you use a different one, comment this
     # one out.
-
-    url("^$", direct_to_template, {"template": "index.html"}, name="home"),
+    url(r'^user/', include('USERMGMT.urls')),
     url(r'^research$', 'MAIN.views.research', name='research'),
     # url(r'^import/(?P<start>.+)/(?P<end>.+)/$', 'MAIN.views.importXML', name='import'),
-    # url(r'^uuu$', 'MAIN.views.updateImportXML', name='uuu'),
+    url("^$", direct_to_template, {"template": "index.html"}, name="home"),
     url(r'^print$', 'MAIN.views.displayCompanies', name='print'),
-    # url(r'^test$', 'MAIN.views.test', name='test'),
 
     # HOMEPAGE AS AN EDITABLE PAGE IN THE PAGE TREE
     # ---------------------------------------------
