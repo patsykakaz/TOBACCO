@@ -54,12 +54,47 @@
 
 
 <nav class="navbar navbar-default">
-    <div class="container-fluid">
+    <div class="container">
         <div class="navbar-header">
             <a class="navbar-logo" href="/">
                 <img src='{% static "img/logo_small.png" %}' alt='logo annuaire du tabac'>
                 La base de donnée professionnelle du tabac et du marché des buralistes
             </a>
+        </div>
+        <div class="collapse navbar-collapse">
+            <ul class='nav navbar-nav navbar-right'>
+                <li class="dropdown">
+                    <a href class="dropdown-toggle text-center" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        {% if not user.is_authenticated %}
+                            <i class='fa fa-2x fa-user'></i>
+                            <span class='mobileTitle'>CONNEXION</span>
+                        {% else %}
+                            <i class='fa fa-2x fa-user' style='color:#FEC10D'></i>
+                            <span class='mobileTitle'>PROFIL</span>
+                        {% endif %}
+                    </a>
+                    <ul class="dropdown-menu text-center">
+                        {% if not user.is_authenticated %}
+                        <li class="{% if page_univ.is_current_or_ascendant %}active{% endif %}">
+                            <a href="/user/login/">
+                                connexion
+                            </a>
+                        </li>
+                         {% else %}
+                        <li class="{% if page_univ.is_current_or_ascendant %}active{% endif %}">
+                            <a href="/user/modification/">
+                                modifier profil
+                            </a>
+                        </li>
+                        <li class="{% if page_univ.is_current_or_ascendant %}active{% endif %}">
+                            <a href="/user/logout/">
+                                déconnexion
+                            </a>
+                         </li>
+                         {% endif %}
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
