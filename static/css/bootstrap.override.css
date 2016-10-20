@@ -1,4 +1,7 @@
 
+.navbar, #contentNav{
+    margin-bottom: 0;
+}
 .navbar-default{
     background-color: #FFFFFF;
 }
