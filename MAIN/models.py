@@ -12,6 +12,11 @@ from mezzanine.core.models import RichText
 from mezzanine.core.fields import RichTextField, FileField
 from mezzanine.utils.models import upload_to
 
+class Client(models.Model):
+    email = models.EmailField(unique=True, max_length=100)
+    password = models.CharField(max_length=128)
+    is_active = True
+    is_staff= False
 
 class Product(Page, RichText):
     illustration = FileField(verbose_name=_("illustration"),
