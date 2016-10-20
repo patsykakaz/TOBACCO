@@ -34,7 +34,7 @@
                             {% endbuttons %}
                         </form>
                     {% else %}
-                        <h3 style='margin: 0 0 10px 0'>Pour accéder à cette page, vous devez être abonné à la <span style='color:#FEC10D;'>lettre PNP</span></h3>
+                        <h3 style='margin: 0 0 10px 0'>Pour accéder à cette page, vous devez être abonné </h3>
                         <h4 class='text-muted' style='margin-bottom: 15px;'>Merci de vous identifier.</h4>
                         <form method='POST' action=''>
                             {% csrf_token %}
@@ -55,7 +55,7 @@
                         <i class='fa fa-arrow-right'></i> vous souhaitez vous abonner
                     </a> <br />
                     <a href='{% url 'ask_abo' %}' style='color:#007099;'>
-                        <i class='fa fa-arrow-right'></i> Vous êtes abonné à <span style='color:#FEC10D;'>la Lettre</span>, mais ne connaissez pas vos identifiants
+                        <i class='fa fa-arrow-right'></i> Vous êtes abonné mais ne connaissez pas vos identifiants
                     </a>
                 </div>
             </div>
