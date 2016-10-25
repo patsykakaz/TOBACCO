@@ -137,54 +137,52 @@
 </nav>
 {% endblock %}
 
-<div id='main'>
-    <div class='container'>
-    {% if request.user.is_authenticated  %}  
-    <div class='col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-6 col-sm-6 col-sm-offset-6 col-xs-10 col-xs-offset-1 text-center' style=' margin-top: 30px; padding:10px 30px; border-radius:5px; background-color:white; font-size:16px;'>
-        Bienvenue sur votre espace utilisateur,  
-        <b style='color:#FEC10D'>
-            <i class='fa fa-user' style='color:white;'></i>
-            {{ request.user.email|truncatechars:30 }}
-        </b>
-    </div>
-    {% endif %}
-    {% nevercache %}
-    {% block message %}
-        {% if message %}
-            <div id='success' class='col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3' style='margin-top: 45px;'>
-                <div class='alert alert-success text-center' style='padding: 10px 15px 5px 15px;'>
-                    <h3 style='margin: 10px;'>{{ message }}</h3>
-                </div>
-            </div>
-        {% endif %}
-    {% endblock %}
-    {% block error %}
-        {% if error %}
-            <div id='error' class='col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3'>
-                <div class='alert alert-danger text-center' style='padding: 10px 15px 5px 15px;'>
-                    <i class='icon-warning-sign'></i> Erreur parmi les données soumises.
-                    <h3 style='margin: 10px;'>{{ error }}</h3>
-                </div>
-            </div>
-        {% endif %}
-    {% endblock %}
-    {% block obsolete%}
-        {% if obsolete %}
-        <div id='obsolete' class='col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3' style='margin-top: 45px;'>
-            <div class='alert alert-info text-center' style='padding: 10px 15px 5px 15px;'>
-                <h3 style='margin: 10px;'> Votre compte ne dispose plus d'un abonnement valide. </h3>
-                <p>
-                    Merci de contacter le service Abonnement.
-                </p>
+<div class='container'>
+{% if request.user.is_authenticated  %}  
+<div class='col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-6 col-sm-6 col-sm-offset-6 col-xs-10 col-xs-offset-1 text-center' style=' margin-top: 30px; padding:10px 30px; border-radius:5px; background-color:white; font-size:16px;'>
+    Bienvenue sur votre espace utilisateur,  
+    <b style='color:#FEC10D'>
+        <i class='fa fa-user' style='color:white;'></i>
+        {{ request.user.email|truncatechars:30 }}
+    </b>
+</div>
+{% endif %}
+{% nevercache %}
+{% block message %}
+    {% if message %}
+        <div id='success' class='col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3' style='margin-top: 45px;'>
+            <div class='alert alert-success text-center' style='padding: 10px 15px 5px 15px;'>
+                <h3 style='margin: 10px;'>{{ message }}</h3>
             </div>
         </div>
-        {% endif %}
-    {% endblock %}
-    {% endnevercache %}
+    {% endif %}
+{% endblock %}
+{% block error %}
+    {% if error %}
+        <div id='error' class='col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3'>
+            <div class='alert alert-danger text-center' style='padding: 10px 15px 5px 15px;'>
+                <i class='icon-warning-sign'></i> Erreur parmi les données soumises.
+                <h3 style='margin: 10px;'>{{ error }}</h3>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block obsolete%}
+    {% if obsolete %}
+    <div id='obsolete' class='col-md-6 col-sm-6 col-md-offset-3 col-sm-offset-3' style='margin-top: 45px;'>
+        <div class='alert alert-info text-center' style='padding: 10px 15px 5px 15px;'>
+            <h3 style='margin: 10px;'> Votre compte ne dispose plus d'un abonnement valide. </h3>
+            <p>
+                Merci de contacter le service Abonnement.
+            </p>
+        </div>
     </div>
+    {% endif %}
+{% endblock %}
+{% endnevercache %}
+</div>
 {% block main %}
 {% endblock %}
-</div>
 
 <footer>
     <div class="container">

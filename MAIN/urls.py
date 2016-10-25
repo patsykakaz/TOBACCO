@@ -38,7 +38,7 @@ urlpatterns += [
     # one out.
     url(r'^user/', include('USERMGMT.urls')),
     url("^$", 'MAIN.views.research', name="home"),
-    url(r'^research$', 'MAIN.views.research', name='research'),
+    url(r'^research/$', 'MAIN.views.research', name='research'),
     # url(r'^import/(?P<start>.+)/(?P<end>.+)/$', 'MAIN.views.importXML', name='import'),
     url(r'^print$', 'MAIN.views.displayCompanies', name='print'),
 

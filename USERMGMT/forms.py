@@ -131,12 +131,7 @@ class AskAboForm(forms.Form):
     email = forms.EmailField(label="Adresse e-mail",required=True)
     societe= forms.CharField(label='Société', max_length=50, required=True)
     phone = forms.CharField(label='Téléphone',required=False)
-    REVUE_CHOICES = (
-        ('PNP', 'PNP'),
-        ('La Lettre PNP', 'La Lettre PNP'),
-        ('PNP + La Lettre PNP', 'PNP + La Lettre PNP'),
-    )
-    revue = forms.ChoiceField(choices=REVUE_CHOICES)
+    logista = forms.CharField(label='Code Logista', required=True)
 
     def clean(self):
         email = self.cleaned_data.get('email')
@@ -159,7 +154,7 @@ class AskAboForm(forms.Form):
             msg.send()
         except:
             self.add_error('email', '')
-            raise forms.ValidationError("L'adresse mail soumise semble invalide")
+            raise forms.ValidationError("L'adresse mail soumise est invalide")
         return self.cleaned_data
 
 

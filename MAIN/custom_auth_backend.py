@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -39,7 +40,7 @@ class ClientAuthBackend(ModelBackend):
                     aboList = repr(xml)
                     active_abo = False
                     for abonnement in xml.children().children().children():
-                        if int(abonnement.refTitre) == 26 and str(abonnement.obsolete) == 'false':
+                        if int(abonnement.refTitre) == settings.REF_ABO and str(abonnement.obsolete) == 'false':
                             active_abo = True
 
                     # Green light from aboWeb

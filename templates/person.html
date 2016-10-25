@@ -12,6 +12,11 @@
 {% block main %}
     <div id='main' class='container'>
         <div class='row'>
+            <div class='col-md-10 col-md-offset-1' style='margin-top:20px;'>
+                <a href='/research' class='text-muted'>
+                    Retour à la page de recherche
+                </a>
+            </div>
             <h3 class='text-center' style='margin-bottom:0; color:rgb(120,120,140);'>Personne</h3>
             <h1 class='text-center' style='margin:10px 0 50px 0;'>{{ person.firstName }} {{ person.title }}</h1>
             {% if person.illustration %}

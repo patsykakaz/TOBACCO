@@ -4,6 +4,11 @@
 {% block main %}
     <div id='main' class='container'>
         <div class='row'>
+            <div class='col-md-10 col-md-offset-1' style='margin-top:20px;'>
+                <a href='/research' class='text-muted'>
+                    Retour à la page de recherche
+                </a>
+            </div>
             <h2 class='text-center' style='margin-bottom:0; color:rgb(120,120,140);'>Société</h2>
             <h1 class='text-center' style='margin:10px 0 100px 0;'>{{ company.title }}</h1>
             {% if company.illustration %}
@@ -38,17 +43,7 @@
                                     {{ brand.title }}
                                 </span>
                             </a>
-                            {% if brand.products %}
-                                <span class='text-muted'>[{% for product in brand.products.all %}
-                                    {{ product.title }}
-                                    {% if not forloop.last %}, {% endif %}
-                                {% endfor %}]</span>
-                            {% endif %}
-                            {% if not forloop.last %}| {% endif %}
                         {% endfor %}
-                        {# {% if company.brands.all|length > 6 %} #}
-                            {# <i class='fa fa-ellipsis-h'></i> #}
-                        {# {% endif %} #}
                     </div>
                 {% endif %}
                 <div class='separator'></div>

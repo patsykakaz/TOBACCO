@@ -67,7 +67,7 @@ a{
     max-width: 300px
 }
 #main{
-    margin-bottom: 100px;
+    padding-bottom: 100px;
 }
 #search{
     margin-bottom: 50px;

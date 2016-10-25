@@ -191,8 +191,8 @@ def ask_abo(request):
             subject= "DEMANDE ABONNEMENT - "+ request.POST['revue']
             from_email= settings.ADMINS[1][1]
             to = "abonnement@groupembc.com"
-            text_content = "Une nouvelle demande d'abonnement vient d'être soumise sur pnpapetier.com pour le(s) magazine(s) : "+ request.POST['revue'] +". Les informations sont les suivantes : "+ request.POST['gender'] +" (prénom) "+ request.POST['prenom']+" (nom)"+ request.POST['nom'] +" (société)"+ request.POST['societe'] +". Email = "+ request.POST['email'] + ". Tel: "+ request.POST['phone']
-            html_content = "<p>Une nouvelle demande d'abonnement vient d'être soumise sur pnpapetier.com pour le(s) magazine(s) : "+ request.POST['revue'] +".</p> <p>Les informations sont les suivantes : </p> genre = "+ request.POST['gender'] +"<br /> prénom = "+ request.POST['prenom']+"<br /> nom = "+ request.POST['nom'] +"<br /> société = "+ request.POST['societe'] +" <br /> Email = "+ request.POST['email'] + "<br /> Tel: "+ request.POST['phone']
+            text_content = "Une nouvelle demande d'abonnement vient d'être soumise sur larevuedestabacs.fr. Les informations sont les suivantes : "+ request.POST['gender'] +" (prénom) "+ request.POST['prenom']+" (nom)"+ request.POST['nom'] +" (société)"+ request.POST['societe'] +". Email = "+ request.POST['email'] + ". Tel: "+ request.POST['phone']+ " <br /> CODE LOGISTA: "+ request.POST['logista']
+            html_content = "<p>Une nouvelle demande d'abonnement vient d'être soumise sur larevuedestabacs.fr.</p> <p>Les informations sont les suivantes : </p> genre = "+ request.POST['gender'] +"<br /> prénom = "+ request.POST['prenom']+"<br /> nom = "+ request.POST['nom'] +"<br /> société = "+ request.POST['societe'] +" <br /> Email = "+ request.POST['email'] + "<br /> Tel: "+ request.POST['phone']+ " <br /> CODE LOGISTA: "+ request.POST['logista']
             msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
             msg.attach_alternative(html_content, "text/html")
             msg.send()
