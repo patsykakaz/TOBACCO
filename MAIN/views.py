@@ -103,13 +103,13 @@ def research(request):
                 for model in models: # Iteration over models starting
                     query = model.objects.all() # Create a queryset with the given model
                     alt_query = []
-                    wordMagic = [reduce(ior,[Q(**{"%s__icontains" % f: w}) 
+                    wordMagic = [reduce(ior,[Q(**{"%s__unaccent__icontains" % f: w}) 
                                             for f in model.search_fields])
                                             for w in words] # Q every word in searchQuery
                     query = query.filter(reduce(ior, wordMagic)) # Filter queryset with optionnals
                     if model == Person and job_filter:
                         for k in query:
-                            if not len(Job.objects.filter(Q(person=k) & Q(title__icontains=job_filter))):
+                            if not len(Job.objects.filter(Q(person=k) & Q(title__unaccent__icontains=job_filter))):
                                 query = query.exclude(pk=k.pk)
                                 alt_query.append(k)
                     if topic_filter: # filter if topic is given

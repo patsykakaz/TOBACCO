@@ -7,6 +7,7 @@ from django.views.i18n import set_language
 
 from mezzanine.core.views import direct_to_template
 from mezzanine.conf import settings
+from MAIN.views import *
 
 
 admin.autodiscover()
@@ -37,10 +38,10 @@ urlpatterns += [
     # one homepage pattern, so if you use a different one, comment this
     # one out.
     url(r'^user/', include('USERMGMT.urls')),
-    url("^$", 'MAIN.views.research', name="home"),
-    url(r'^research/$', 'MAIN.views.research', name='research'),
+    url("^$", research, name="home"),
+    url(r'^research/$', research, name='research'),
     # url(r'^import/(?P<start>.+)/(?P<end>.+)/$', 'MAIN.views.importXML', name='import'),
-    url(r'^print$', 'MAIN.views.displayCompanies', name='print'),
+    url(r'^print$', displayCompanies, name='print'),
 
     # HOMEPAGE AS AN EDITABLE PAGE IN THE PAGE TREE
     # ---------------------------------------------

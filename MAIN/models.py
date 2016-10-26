@@ -108,6 +108,7 @@ class Company(Page, RichText):
     fax = models.TextField(null=False,blank=True)
     website = models.TextField(null=False,blank=True)
     highlight = models.BooleanField(default=False,null=False,blank=True)
+    hidden_contact = models.CharField(max_length=255,default=False,null=False,blank=False)
 
     def __unicode__(self):
         return '%s' % (self.title)
@@ -178,7 +179,7 @@ class Job(models.Model):
     person = models.ForeignKey(Person,verbose_name='Employé')
     company = models.ForeignKey(Company)
     title = models.CharField(max_length=255,null=False,blank=True,verbose_name='intitulé du poste')
-    # rank = models.IntegerField(null=True,blank=True)
+    rank = models.IntegerField(null=True,blank=True)
     since = models.DateField(auto_now=False,auto_now_add=False,null=True,blank=True,verbose_name='date d\'entrée en fonction')
     until = models.DateField(auto_now=False,auto_now_add=False,null=True,blank=True,verbose_name='date de fin de la fonction')
     search_fields = ("title", "company__title")

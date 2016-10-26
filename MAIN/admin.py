@@ -55,6 +55,7 @@ company_fieldsets[0][1]["fields"].insert(-1, "fax")
 company_fieldsets[0][1]["fields"].insert(-1, "email")
 company_fieldsets[0][1]["fields"].insert(-1, "website")
 company_fieldsets[0][1]["fields"].insert(-1, "highlight")
+company_fieldsets[0][1]["fields"].insert(-1, "hidden_contact")
 
 class CompanyAdmin(PageAdmin):
     inlines = (JobInline,SubsidiaryInline)
