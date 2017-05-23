@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 from random import randint
+import xlwt
 
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
@@ -188,7 +189,7 @@ def ask_abo(request):
     if request.POST:
         form = AskAboForm(request.POST)
         if form.is_valid():
-            subject= "DEMANDE ABONNEMENT - "
+            subject= "DEMANDE ABONNEMENT"
             from_email= settings.ADMINS[1][1]
             to = "abonnement@groupembc.com"
             text_content = "Une nouvelle demande d'abonnement vient d'être soumise sur larevuedestabacs.fr. Les informations sont les suivantes : "+ request.POST['gender'] +" (prénom) "+ request.POST['prenom']+" (nom)"+ request.POST['nom'] +" (société)"+ request.POST['societe'] +". Email = "+ request.POST['email'] + ". Tel: "+ request.POST['phone']+ " <br /> CODE LOGISTA: "+ request.POST['logista']
@@ -203,4 +204,5 @@ def ask_abo(request):
     else:
         form = AskAboForm()
     return render(request, 'abonnement.html', locals())
+
 

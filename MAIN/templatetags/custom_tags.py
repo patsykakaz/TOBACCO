@@ -77,7 +77,7 @@ def ExtendBrand(brand, *args):
     html = "<h4 class='text-center'>"+brand.title+"</h4>"
     products = brand.products.all()
     if products:
-        html += "<span class='text-muted'>Produits distribués : </span>"
+        html += "<div class='text-muted text-center'>Produits distribués : </div>"
         for product in products: 
             html += product.title+" • "
     html = html[:len(html)-2]

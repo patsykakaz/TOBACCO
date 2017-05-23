@@ -38,9 +38,9 @@
                     <div><strong>Marques: </strong></div>
                     <div>
                         {% for brand in company.brands.all %}
-                            <a href='{{ brand.get_absolute_url }}'>
+                            <a href='{{ brand.get_absolute_url }}' style='display:inline-block; margin-right:10px;'>
                                 <span role="button" data-html="true" data-toggle="popover" data-trigger="hover" title="Marque" data-content="{{ brand|ExtendBrand|safe }}">
-                                    {{ brand.title }}
+                                    {{ brand.title }} 
                                 </span>
                             </a>
                         {% endfor %}

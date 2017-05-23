@@ -42,6 +42,8 @@ urlpatterns += [
     url(r'^research/$', research, name='research'),
     # url(r'^import/(?P<start>.+)/(?P<end>.+)/$', 'MAIN.views.importXML', name='import'),
     url(r'^print$', displayCompanies, name='print'),
+    # url(r"^temp$", ConvertCompaniesInUser, name="ConvertCompaniesInUser"),
+    url(r'^export/$', export_users_xls, name='export_users_xls'),
 
     # HOMEPAGE AS AN EDITABLE PAGE IN THE PAGE TREE
     # ---------------------------------------------

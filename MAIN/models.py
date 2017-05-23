@@ -100,6 +100,7 @@ class Company(Page, RichText):
     adress = models.CharField(max_length=255, null=False,blank=True)
     zipCode = models.CharField(max_length=255, null=False,blank=True)
     bp = models.CharField(max_length=100,null=False,blank=True)
+    # cs = models.CharField(max_length=100,null=False,blank=True)
     area = models.CharField(max_length=255, null=False,blank=True)
     city = models.CharField(max_length=255, null=False,blank=True)
     country = models.CharField(max_length=255,null=False,blank=True)

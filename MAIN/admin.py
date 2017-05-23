@@ -12,12 +12,12 @@ from mezzanine.blog.models import BlogPost
 
 class ProductAdmin(PageAdmin):
     allFields = deepcopy(PageAdmin.fieldsets)
-    allFields[0][1]["fields"].insert(-1, "content")
+    # allFields[0][1]["fields"].insert(-1, "content")
     fieldsets = allFields
 
 
 brand_fieldsets = deepcopy(PageAdmin.fieldsets)
-brand_fieldsets[0][1]["fields"].insert(-1, "content")
+# brand_fieldsets[0][1]["fields"].insert(-1, "content")
 brand_fieldsets[0][1]["fields"].insert(-1, "products")
 brand_fieldsets[0][1]["fields"].insert(-1, "topics")
 brand_fieldsets[0][1]["fields"].insert(-1, "illustration")

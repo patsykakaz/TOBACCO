@@ -5,10 +5,17 @@ from __future__ import unicode_literals
 import os
 from operator import ior, iand
 from PIL import Image
+from base64 import b64encode
+import hashlib
+import xlwt
 
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.db.models import Q
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
+# from hashlib import sha1
 # from django.contrib.auth import logout, login, authenticate, get_backends
 # from django.contrib.auth.forms import UserCreationForm
 # from django.contrib.auth.models import User
@@ -40,7 +47,10 @@ def research(request):
                 countries.append(p.country)
         except:
             pass
-    countries.remove('')
+    try:
+        countries.remove('')
+    except:
+        pass
     model_type = job_filter = topic_filter = product_filter = zipcode_filter = False
     if request.POST and 'search' in request.POST:
         data = True
@@ -103,7 +113,7 @@ def research(request):
                 for model in models: # Iteration over models starting
                     query = model.objects.all() # Create a queryset with the given model
                     alt_query = []
-                    wordMagic = [reduce(ior,[Q(**{"%s__unaccent__icontains" % f: w}) 
+                    wordMagic = [reduce(ior,[Q(**{"%s__icontains" % f: w}) 
                                             for f in model.search_fields])
                                             for w in words] # Q every word in searchQuery
                     query = query.filter(reduce(ior, wordMagic)) # Filter queryset with optionnals
@@ -582,3 +592,118 @@ def importXML(request,start,end):
     return HttpResponse("IMPORT XML process ended.")
 
 
+def exportCompanies(request):
+    export_all = "["
+    all_companies = Company.objects.all().order_by('pk')
+    for company in all_companies:
+        export_company = []
+        elements = [company.title,
+                    company.adress,
+                    company.zipCode, 
+                    company.bp,
+                    company.area,
+                    company.city,
+                    company.country,
+                    company.email,
+                    company.tel, 
+                    company.fax,
+                    company.website,
+                ]
+        for element in elements : 
+            if element and len(element) > 0:
+                export_company.append(element)
+            else:
+                export_company.append(False)
+        company_subs = []
+        for sub in company.subsidiaries.all():
+            company_subs.append(sub.pk)
+        export_company.append(company_subs)
+        company_topics = []
+        for topic in company.topics.all():
+            company_topics.append(topic.pk)
+        export_company.append(company_topics)
+        company_brands = []
+        for brand in company.brands.all():
+            company_brands.append(brand.pk)
+        export_company.append(company_brands)
+        export_all += str(export_company) + ",<br />"
+    export_all += "]"
+    return HttpResponse("<div>"+export_all+"</div>")
+
+
+def ConvertCompaniesInUser(request):
+    kk = Company.objects.exclude(zipCode="")
+    for k in kk:
+        try:
+            User.objects.get(username="User-"+str(k.pk))
+            print "[company-%s] %s already exists as a User" % (k.pk, k.title)
+        except: 
+            print "About to create a User object for [company-%s]" + k.title
+            passwordBase = str("U"+str(k.pk))
+            hash_object = hashlib.sha256(passwordBase.encode('utf8'))
+            password = hash_object.hexdigest()
+            password = str(password)[-8:]
+            # u = User(username='User-'+str(k.pk), password=password,
+                    # last_name=k.title[:29], email=k.email,
+                    # is_active=True, is_staff=False)
+            # u.save()
+            User.objects.create_user(username='User-'+str(k.pk), password=password, last_name=k.title[:29], email=k.email,
+                    is_active=True, is_staff=False)
+    return HttpResponse("<h2>ConvertCompaniesInUser process terminated </h2>")
+
+@login_required
+def export_users_xls(request):
+    if request.user.is_staff:
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="users.xls"'
+
+        wb = xlwt.Workbook(encoding='ascii')
+        ws = wb.add_sheet('Users')
+
+        # Sheet header, first row
+        row_num = 0
+
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+
+        columns = ['pk', 'nom_societe', 'username', 'password', 'eMail',
+                    'nom contact', 'prenom contact', 'eMail contact', 'tel contact', 'poste contact'
+                    ]
+
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+
+        # Sheet body, remaining rows
+        font_style = xlwt.XFStyle()
+        # // nom société, contact (Nom, prénom, mail, phone, poste)
+        rows = User.objects.filter(username__contains='User-')
+        # rows = User.objects.all()
+
+        kList = []
+        for U in rows: 
+            k = []
+            C = Company.objects.get(pk=int(U.username[5:]))
+            print "Processing company %s - %s" % (C.pk, C.title)
+            passwordBase = str("User-"+str(C.pk))
+            hash_object = hashlib.sha256(passwordBase.encode('utf8'))
+            password = hash_object.hexdigest()
+            password = str(password)[-8:]
+            print password
+            J = Job.objects.filter(company=C)
+            if J:
+                J = J[0]
+                P = J.person
+                k += [U.pk, C.title, U.username, password, U.email, P.title, P.firstName, P.email, P.tel, J.title]
+            else: 
+                k += [U.pk, C.title, U.username, password, U.email, "False", "False", "False", "False", "False"]
+            kList.append(k)
+
+        for row in kList:
+            row_num += 1
+            for col_num in range(len(columns)):
+                ws.write(row_num, col_num, row[col_num], font_style)
+
+        wb.save(response)
+    else:
+        return HttpResponse("Page réservée aux administrateurs du site")
+    return response
